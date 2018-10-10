@@ -1,3 +1,9 @@
+This fork does not contain commands and contains only the main framework target.
+
+## Why?
+
+I wanted to add ios_system to [Pisth](https://github.com/ColdGrub1384/Pisth). I used precompiled ios_system builds. The ios_systemw builds don't support iOS simulator so I recompiled it myself (but not the commands) to fix the build error on simulator. Commands still not working but the build is successfull. But, when I archive the project and upload it to App Store Connect, an error says me Xcode can't sign ios_system. Probably because I merged iOS build and Simulator build. So, I need to embed ios_system as a Git submodule and compile it myself, but not commands. So, I added this repo as submodule and I only re-build the ios_system framework. I don't want to just copy the project and remove all things I don't need.
+
 # ios_system: Drop-in replacement for system() in iOS programs
 
 
