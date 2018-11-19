@@ -76,6 +76,7 @@ typedef struct _functionParameters {
 static void cleanup_function(void* parameters) {
     // This function is called when pthread_exit() or ios_kill() is called
     functionParameters *p = (functionParameters *) parameters;
+    fflush(thread_stdin);
     fflush(thread_stdout);
     fflush(thread_stderr);
     // release parameters:
@@ -298,7 +299,7 @@ static void initializeCommandList()
         // merge the two dictionaries:
         NSMutableDictionary *mutableDict = [commandList mutableCopy];
         [mutableDict addEntriesFromDictionary:extraCommandList];
-        commandList = [mutableDict mutableCopy];
+        commandList = [mutableDict copy];
     }
 }
 
@@ -493,6 +494,75 @@ FILE* ios_popen(const char* inputCmd, const char* type) {
     return NULL;
 }
 
+// small function, behaves like strstr but skips quotes (Yury Korolev)
+char *strstrquoted(char* str1, char* str2) {
+    
+    if (str1 == NULL || str2 == NULL) {
+        return NULL;
+    }
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+    
+    if (len1 < len2) {
+        return NULL;
+    }
+    
+    if (strcmp(str1, str2) == 0) {
+        return str1;
+    }
+    
+    char quotechar = 0;
+    int esclen = 0;
+    int matchlen = 0;
+    
+    for (int i = 0; i < len1; i++) {
+        char ch = str1[i];
+        if (quotechar) {
+            if (ch == '\\') {
+                esclen++;
+                continue;
+            }
+            
+            if (ch == quotechar) {
+                if (esclen % 2 == 1) {
+                    esclen = 0;
+                    continue;
+                }
+                quotechar = 0;
+                esclen = 0;
+                continue;
+            }
+            
+            esclen = 0;
+            continue;
+        }
+        
+        if (ch == '"' || ch == '\'') {
+            if (esclen % 2 == 0) {
+                quotechar = ch;
+            }
+            matchlen = 0;
+            esclen = 0;
+            continue;
+        }
+        
+        if (ch == '\\') {
+            esclen++;
+        }
+        
+        if (str2[matchlen] == ch) {
+            matchlen++;
+            if (matchlen == len2) {
+                return str1 + i - matchlen + 1;
+            }
+            continue;
+        }
+        
+        matchlen = 0;
+    }
+    return NULL;
+}
+
 static char* concatenateArgv(char* const argv[]) {
     int argc = 0;
     int cmdLength = 0;
@@ -504,9 +574,9 @@ static char* concatenateArgv(char* const argv[]) {
     strcpy(cmd, argv[0]);
     argc = 1;
     while (argv[argc] != NULL) {
-        if (strstr(argv[argc], " ")) {
+        if (strstrquoted(argv[argc], " ")) {
             // argument contains spaces. Enclose it into quotes:
-            if (strstr(argv[argc], "\"") == NULL) {
+            if (strstrquoted(argv[argc], "\"") == NULL) {
                 // argument does not contain ". Enclose with "
                 strcat(cmd, " \"");
                 strcat(cmd, argv[argc]);
@@ -514,8 +584,8 @@ static char* concatenateArgv(char* const argv[]) {
                 argc++;
                 continue;
             }
-            if (strstr(argv[argc], "'") == NULL) {
-                // Enclose with '
+            if (strstrquoted(argv[argc], "'") == NULL) {
+                // argument does not contain '. Enclose with '
                 strcat(cmd, " '");
                 strcat(cmd, argv[argc]);
                 strcat(cmd, "'");
@@ -654,7 +724,7 @@ int ios_kill()
 {
     if (currentSession == NULL) return ESRCH;
     if (currentSession.current_command_root_thread > 0) {
-        // Send pthread_kill with the given signal to the current main thread, if there is one.
+        // Send pthread_cancel with the given signal to the current main thread, if there is one.
         return pthread_cancel(currentSession.current_command_root_thread);
     }
     // No process running
@@ -752,7 +822,7 @@ void replaceCommand(NSString* commandName, NSString* functionName, bool allOccur
                 [mutableDict setValue: [NSArray arrayWithObjects: @"MAIN", functionName, @"", @"file", nil] forKey: existingCommand];
         }
     }
-    commandList = [mutableDict mutableCopy];
+    commandList = [mutableDict copy]; // back to non-mutable version
 }
 
 // For customization:
@@ -786,7 +856,7 @@ NSError* addCommandList(NSString* fileLocation) {
     // merge the two dictionaries:
     NSMutableDictionary *mutableDict = [commandList mutableCopy];
     [mutableDict addEntriesFromDictionary:newCommandList];
-    commandList = [mutableDict mutableCopy];
+    commandList = [mutableDict copy];
     return NULL;
 }
 
@@ -871,6 +941,7 @@ static char* unquoteArgument(char* argument) {
     return argument;
 }
 
+
 int ios_system(const char* inputCmd) {
     char* command;
     // The names of the files for stdin, stdout, stderr
@@ -902,7 +973,7 @@ int ios_system(const char* inputCmd) {
     // fprintf(thread_stderr, "Command sent: %s \n", cmd); fflush(stderr);
     if (cmd[0] == '"') {
         // Command was enclosed in quotes (almost always with Vim)
-        char* endCmd = strstr(cmd + 1, "\""); // find closing quote
+        char* endCmd = strstrquoted(cmd + 1, "\""); // find closing quote
         if (endCmd) {
             cmd = cmd + 1; // remove starting quote
             endCmd[0] = 0x0;
@@ -913,7 +984,7 @@ int ios_system(const char* inputCmd) {
     if (cmd[0] == '(') {
         // Standard vim encoding: command between parentheses
         command = cmd + 1;
-        char* endCmd = strstr(command, ")"); // remove closing parenthesis
+        char* endCmd = strstrquoted(command, ")"); // remove closing parenthesis
         if (endCmd) {
             endCmd[0] = 0x0;
             assert(endCmd < maxPointer);
@@ -939,7 +1010,7 @@ int ios_system(const char* inputCmd) {
     params->argc = 0; params->argv = 0; params->argv_ref = 0;
     params->function = NULL; params->isPipeOut = false; params->isPipeErr = false;
     // scan until first "<" (input file)
-    inputFileMarker = strstr(inputFileMarker, "<");
+    inputFileMarker = strstrquoted(inputFileMarker, "<");
     // scan until first non-space character:
     if (inputFileMarker) {
         inputFileName = inputFileMarker + 1; // skip past '<'
@@ -950,8 +1021,8 @@ int ios_system(const char* inputCmd) {
     // We assume here a logical command order: < before pipe, pipe before >.
     // TODO: check what happens for unlogical commands. Refuse them, but gently.
     // TODO: implement tee, because that has been removed
-    char* pipeMarker = strstr (outputFileMarker,"&|");
-    if (!pipeMarker) pipeMarker = strstr (outputFileMarker,"|&"); // both seem to work
+    char* pipeMarker = strstrquoted(outputFileMarker,"&|");
+    if (!pipeMarker) pipeMarker = strstrquoted(outputFileMarker,"|&"); // both seem to work
     if (pipeMarker) {
         bool pushMainThread = currentSession.isMainThread;
         currentSession.isMainThread = false;
@@ -960,7 +1031,7 @@ int ios_system(const char* inputCmd) {
         pipeMarker[0] = 0x0;
         sharedErrorOutput = true;
     } else {
-        pipeMarker = strstr (outputFileMarker,"|");
+        pipeMarker = strstrquoted(outputFileMarker,"|");
         if (pipeMarker) {
             bool pushMainThread = currentSession.isMainThread;
             currentSession.isMainThread = false;
@@ -971,24 +1042,24 @@ int ios_system(const char* inputCmd) {
     }
     // We have removed the pipe part. Still need to parse the rest of the command
     // Must scan in strstr by reverse order of inclusion. So "2>&1" before "2>" before ">"
-    errorFileMarker = strstr (outputFileMarker,"&>"); // both stderr/stdout sent to same file
+    errorFileMarker = strstrquoted(outputFileMarker,"&>"); // both stderr/stdout sent to same file
     // output file name will be after "&>"
     if (errorFileMarker) { outputFileName = errorFileMarker + 2; outputFileMarker = errorFileMarker; }
     if (!errorFileMarker) {
         // TODO: 2>&1 before > means redirect stderr to (current) stdout, then redirects stdout
         // ...except with a pipe.
         // Currently, we don't check for that.
-        errorFileMarker = strstr (outputFileMarker,"2>&1"); // both stderr/stdout sent to same file
+        errorFileMarker = strstrquoted(outputFileMarker,"2>&1"); // both stderr/stdout sent to same file
         if (errorFileMarker) {
             if (params->stdout) params->stderr = params->stdout;
-            outputFileMarker = strstr(outputFileMarker, ">");
+            outputFileMarker = strstrquoted(outputFileMarker, ">");
             if (outputFileMarker) outputFileName = outputFileMarker + 1; // skip past '>'
         }
     }
     if (errorFileMarker) { sharedErrorOutput = true; }
     else {
         // specific name for error file?
-        errorFileMarker = strstr(outputFileMarker,"2>");
+        errorFileMarker = strstrquoted(outputFileMarker,"2>");
         if (errorFileMarker) {
             errorFileName = errorFileMarker + 2; // skip past "2>"
             // skip past all spaces:
@@ -997,7 +1068,7 @@ int ios_system(const char* inputCmd) {
     }
     // scan until first ">"
     if (!sharedErrorOutput) {
-        outputFileMarker = strstr(outputFileMarker, ">");
+        outputFileMarker = strstrquoted(outputFileMarker, ">");
         if (outputFileMarker) outputFileName = outputFileMarker + 1; // skip past '>'
     }
     if (outputFileName) {
@@ -1006,7 +1077,7 @@ int ios_system(const char* inputCmd) {
     if (errorFileName && (outputFileName == errorFileName)) {
         // we got the same ">" twice, pick the next one ("2>" was before ">")
         outputFileMarker = errorFileName;
-        outputFileMarker = strstr(outputFileMarker, ">");
+        outputFileMarker = strstrquoted(outputFileMarker, ">");
         if (outputFileMarker) {
             outputFileName = outputFileMarker + 1; // skip past '>'
             while ((outputFileName[0] == ' ') && strlen(outputFileName) > 0) outputFileName++;
@@ -1101,7 +1172,7 @@ int ios_system(const char* inputCmd) {
         for (int i = 1; i < argc; i++) if (!dontExpand[i]) {  argv[i] = parseArgument(argv[i], argv[0]); }
         // wildcard expansion (*, ?, []...) Has to be after $ and ~ expansion, results in larger arguments
         for (int i = 1; i < argc; i++) if (!dontExpand[i]) {
-            if (strstr (argv[i],"*") || strstr (argv[i],"?") || strstr (argv[i],"[")) {
+            if (strstrquoted (argv[i],"*") || strstrquoted (argv[i],"?") || strstrquoted (argv[i],"[")) {
                 glob_t gt;
                 if (glob(argv[i], 0, NULL, &gt) == 0) {
                     argc += gt.gl_matchc - 1;
@@ -1343,6 +1414,7 @@ int ios_system(const char* inputCmd) {
         free(argv); // argv is otherwise freed in cleanup_function
     }
     free(originalCommand); // releases cmd, which was a strdup of inputCommand
+    fflush(thread_stdin);
     fflush(thread_stdout);
     fflush(thread_stderr);
     return currentSession.global_errno;
