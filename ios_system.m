@@ -99,7 +99,7 @@ static void cleanup_function(void* parameters) {
     free(parameters); // This was malloc'ed in ios_system
 }
 
-void handler(int sig) {
+void crash_handler(int sig) {
     NSLog(@"Received signal: %i", sig);
     ios_exit(1);
 }
@@ -117,8 +117,8 @@ static void* run_function(void* parameters) {
     thread_stderr = p->stderr;
     thread_context = p->context;
     
-    signal(SIGSEGV, handler);
-    signal(SIGBUS, handler);
+    signal(SIGSEGV, crash_handler);
+    signal(SIGBUS, crash_handler);
     
     // Because some commands change argv, keep a local copy for release.
     p->argv_ref = (char **)malloc(sizeof(char*) * (p->argc + 1));
