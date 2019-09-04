@@ -99,6 +99,11 @@ static void cleanup_function(void* parameters) {
     free(parameters); // This was malloc'ed in ios_system
 }
 
+void handler(int sig) {
+    NSLog(@"Received signal: %i", sig);
+    ios_exit(1);
+}
+
 static void* run_function(void* parameters) {
     // re-initialize for getopt:
     // TODO: move to __thread variable for optind too
@@ -111,6 +116,10 @@ static void* run_function(void* parameters) {
     thread_stdout = p->stdout;
     thread_stderr = p->stderr;
     thread_context = p->context;
+    
+    signal(SIGSEGV, handler);
+    signal(SIGBUS, handler);
+    
     // Because some commands change argv, keep a local copy for release.
     p->argv_ref = (char **)malloc(sizeof(char*) * (p->argc + 1));
     for (int i = 0; i < p->argc; i++) p->argv_ref[i] = p->argv[i];
