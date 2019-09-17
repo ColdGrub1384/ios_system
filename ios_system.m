@@ -102,6 +102,8 @@ static void cleanup_function(void* parameters) {
 void crash_handler(int sig) {
     if (sig == SIGSEGV) {
         fputs("segmentation fault\n", thread_stderr);
+    } else if (sig == SIGABRT) {
+        fputs("sigabrt signal\n", thread_stderr);
     } else if (sig == SIGBUS) {
         fputs("bus error\n", thread_stderr);
     }
@@ -123,6 +125,7 @@ static void* run_function(void* parameters) {
     
     signal(SIGSEGV, crash_handler);
     signal(SIGBUS, crash_handler);
+    signal(SIGABRT, crash_handler);
     
     // Because some commands change argv, keep a local copy for release.
     p->argv_ref = (char **)malloc(sizeof(char*) * (p->argc + 1));
