@@ -6,6 +6,7 @@
 //  Copyright © 2020 Nicolas Holzschuch. All rights reserved.
 //
 
+#if !os(watchOS)
 import Foundation
 import ios_system
 import JavaScriptCore
@@ -554,4 +555,4 @@ public func wasm(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<In
     }
     return 0
 }
-
+#endif
