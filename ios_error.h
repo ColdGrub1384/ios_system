@@ -13,33 +13,19 @@
 extern "C" {
 #endif
 
-#define fork std_fork
-#define abort std_abort
-#define iswprint std_iswprint
-#define getwchar std_getwchar
-#define putwchar std_putwchar
-
 #include <unistd.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <pthread.h>
-#include <stdlib.h>
-#include <wchar.h>
+#include <sys/signal.h>
 
-#undef fork
-#undef abort
-#undef iswprint
-#undef getwchar
-#undef putwchar
-#define abort() ios_exit(1)
-
-/*#define errx compileError
+/* #define errx compileError
 #define err compileError
 #define warn compileError
-#define warnx compileError*/
+#define warnx compileError
 #ifndef printf
 #define printf(...) fprintf (thread_stdout, ##__VA_ARGS__)
-#endif
+#endif */
 
 #define putchar(a) fputc(a, thread_stdout)
 #define getchar() fgetc(thread_stdin)
@@ -57,6 +43,7 @@ extern "C" {
   #define putw ios_putw
   #define putp ios_putp
   #define fflush ios_fflush
+  #define abort() ios_exit(1)
 #endif
 
 // Thread-local input and output streams
@@ -64,7 +51,6 @@ extern __thread FILE* thread_stdin;
 extern __thread FILE* thread_stdout;
 extern __thread FILE* thread_stderr;
 
-#define fork ios_fork
 #define exit ios_exit
 #define _exit ios_exit
 #define kill ios_killpid
@@ -82,6 +68,7 @@ extern __thread FILE* thread_stderr;
 #define unsetenv ios_unsetenv
 #define putenv ios_putenv
 #define fchdir ios_fchdir
+#define signal ios_signal
 
 extern int ios_executable(const char* cmd); // is this command part of the "shell" commands?
 extern int ios_system(const char* inputCmd); // execute this command (executable file or builtin command)
@@ -110,7 +97,10 @@ extern int ios_getCommandStatus(void);
 extern const char* ios_progname(void);
 extern pid_t ios_fork(void);
 extern void ios_waitpid(pid_t pid);
-extern void ios_signal(int signal);
+// Catch signal definition:
+extern int canSetSignal(void);
+extern sig_t ios_signal(int signal, sig_t function);
+
 
 extern int ios_fchdir(const int fd);
 extern ssize_t ios_write(int fildes, const void *buf, size_t nbyte);
@@ -120,6 +110,7 @@ extern int ios_fputs(const char* s, FILE *stream);
 extern int ios_fputc(int c, FILE *stream);
 extern int ios_putw(int w, FILE *stream);
 extern int ios_fflush(FILE *stream);
+extern int ios_getstdin(void);
 extern int ios_gettty(void);
 extern int ios_opentty(void);
 extern void ios_closetty(void);
