@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR || TARGET_OS_MACCATALYST
 #import <UIKit/UIKit.h>
+#endif
 
 //! Project version number for ios_system.
 FOUNDATION_EXPORT double ios_systemVersionNumber;

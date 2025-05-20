@@ -5,7 +5,9 @@
 //  Copyright © 2017 N. Holzschuch. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR || TARGET_OS_MACCATALYST
 #import <UIKit/UIKit.h>
+#endif
 
 #include "ios_system.h"
 
@@ -41,8 +43,14 @@ static NSString* ios_bookmarkDictionaryName = @"bookmarkNames";
 // Include file for getrlimit/setrlimit:
 #include <sys/resource.h>
 static struct rlimit limitFilesOpen;
-extern void display_alert(NSString* title, NSString* message);
 
+#if (defined(TARGET_OS_IPHONE) || defined(TARGET_OS_SIMULATOR) || defined(TARGET_OS_MACCATALYST)) && !defined(TARGET_OS_WATCH)
+extern void display_alert(NSString* title, NSString* message);
+#else
+void display_alert(NSString* title, NSString* message) {
+    NSLog(@"not implemented: display_alert");
+}
+#endif
 
 extern __thread int    __db_getopt_reset;
 __thread FILE* thread_stdin;
@@ -1541,6 +1549,7 @@ static char* concatenateArgv(char* const argv[]) {
     return cmd;
 }
 
+#if !TARGET_OS_WATCH && !TARGET_OS_MAC
 int pbpaste(int argc, char** argv) {
     if (argc == 1) {
         // We can paste strings and URLs.
@@ -1591,6 +1600,7 @@ int pbcopy(int argc, char** argv) {
     }
     return 0;
 }
+#endif
 
 int true_main(int argc, char** argv) {
     return 0;
