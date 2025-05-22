@@ -5,13 +5,13 @@ if [ -z "$LIBSSH2_XCFRAMEWORK_PATH" ] || [ -z "$OPENSSL_XCFRAMEWORK_PATH" ]; the
     exit 1
 fi
 
-cp -r "$LIBSSH2_XCFRAMEWORK_PATH" "ssh2.xcframework"
-cp -r "$OPENSSL_XCFRAMEWORK_PATH" "openssl.xcframework"
+cp -R "$LIBSSH2_XCFRAMEWORK_PATH" "ssh2.xcframework"
+cp -R "$OPENSSL_XCFRAMEWORK_PATH" "openssl.xcframework"
 
 BUILD() {
-    if [[ "$2" == "maccatalyst" ]]; then
+    if [[ "$2" = "maccatalyst" ]]; then
         sdk="macosx"
-        ADDITIONAL_FLAGS="-destination 'platform=macOS,variant=Mac Catalyst,arch=$3' SUPPORTS_MAC_CATALYST=YES"
+        ADDITIONAL_FLAGS="-destination 'platform=macOS,variant=Mac Catalyst,arch=$3' SUPPORTS_MAC_CATALYST=YES ARCHS=$3"
     else
         sdk="$2"
         ADDITIONAL_FLAGS="-arch $3"
@@ -23,7 +23,7 @@ MAKE_FAT_FRAMEWORK() {
     build_dir="build_$2"
     mkdir -p "$build_dir"
     
-    if [[ "$2" == "maccatalyst" ]]; then
+    if [[ "$2" = "maccatalyst" ]]; then
         binary_path="$build_dir/$1.framework/Versions/Current/$1"
     else
         binary_path="$build_dir/$1.framework/$1"
@@ -31,18 +31,20 @@ MAKE_FAT_FRAMEWORK() {
     
     binaries=""
     for arch in $3; do
-        cp -r "$build_dir.$arch/$1.framework" "$build_dir/"
-        binaries="$frameworks $build_dir.$arch/$1.framework/$1"
+        binaries="$binaries '$build_dir.$arch/$1.framework/$1'"
+    done
+    
+    for arch in $3; do
+        cp -R "$build_dir.$arch/$1.framework" "$build_dir/"
+        break
     done
     
     rm "$binary_path"
     
-    for arch in $3; do
-        break
-    done
-    
     eval lipo -create $binaries -output "$binary_path"
 }
+
+rm -rf "ios_system.xcframework" "shell.xcframework" "tar.xcframework" "text.xcframework" "files.xcframework" "awk.xcframework" "curl_ios.xcframework"
 
 ## ios_system ##
 
@@ -63,7 +65,7 @@ BUILD ios_system appletvos        arm64
 BUILD ios_system appletvsimulator arm64
 BUILD ios_system appletvsimulator x86_64
 
-# shell ##
+## shell ##
 
 BUILD shell iphoneos         arm64
 BUILD shell iphonesimulator  arm64
@@ -159,7 +161,7 @@ BUILD awk appletvos        arm64
 BUILD awk appletvsimulator arm64
 BUILD awk appletvsimulator x86_64
 
-# curl_ios ##
+## curl_ios ##
 
 BUILD curl_ios iphoneos         arm64
 BUILD curl_ios iphonesimulator  arm64
