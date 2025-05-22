@@ -449,22 +449,6 @@
 		2254792D2B73814B005041FF /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = D28514A525B20351003405B4 /* config.h */; };
 		225782911FDB4D390050F312 /* curl_config.h in Headers */ = {isa = PBXBuildFile; fileRef = 2257811A1FDB4D380050F312 /* curl_config.h */; };
 		225E1B6F2067F39F005AC151 /* tar.h in Headers */ = {isa = PBXBuildFile; fileRef = 225E1B6D2067F39F005AC151 /* tar.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		225E4F152C56989C00D5E1A9 /* wasm3.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F142C56989C00D5E1A9 /* wasm3.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI -Iwasm3/source"; }; };
-		225E4F252C569AB400D5E1A9 /* m3_compile.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F162C569AB200D5E1A9 /* m3_compile.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F262C569AB400D5E1A9 /* m3_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F172C569AB200D5E1A9 /* m3_parse.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F272C569AB400D5E1A9 /* m3_api_tracer.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F182C569AB200D5E1A9 /* m3_api_tracer.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F282C569AB400D5E1A9 /* m3_exec.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F192C569AB300D5E1A9 /* m3_exec.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F292C569AB400D5E1A9 /* m3_bind.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F1A2C569AB300D5E1A9 /* m3_bind.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F2A2C569AB400D5E1A9 /* m3_info.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F1B2C569AB300D5E1A9 /* m3_info.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F2B2C569AB400D5E1A9 /* m3_function.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F1C2C569AB300D5E1A9 /* m3_function.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F2C2C569AB400D5E1A9 /* m3_module.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F1D2C569AB300D5E1A9 /* m3_module.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F2D2C569AB400D5E1A9 /* m3_code.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F1E2C569AB300D5E1A9 /* m3_code.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F2E2C569AB400D5E1A9 /* m3_env.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F1F2C569AB300D5E1A9 /* m3_env.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F2F2C569AB400D5E1A9 /* m3_core.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F202C569AB300D5E1A9 /* m3_core.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F302C569AB400D5E1A9 /* m3_api_wasi.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F212C569AB300D5E1A9 /* m3_api_wasi.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F312C569AB400D5E1A9 /* m3_api_meta_wasi.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F222C569AB400D5E1A9 /* m3_api_meta_wasi.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F322C569AB400D5E1A9 /* m3_api_uvwasi.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F232C569AB400D5E1A9 /* m3_api_uvwasi.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
-		225E4F332C569AB400D5E1A9 /* m3_api_libc.c in Sources */ = {isa = PBXBuildFile; fileRef = 225E4F242C569AB400D5E1A9 /* m3_api_libc.c */; settings = {COMPILER_FLAGS = "-Dd_m3HasWASI"; }; };
 		225F06102016751900466685 /* getopt_long.c in Sources */ = {isa = PBXBuildFile; fileRef = 225F060F2016751800466685 /* getopt_long.c */; };
 		2261379421F0E59E0097B3A0 /* explicit_bzero.c in Sources */ = {isa = PBXBuildFile; fileRef = 2261379221F0E59D0097B3A0 /* explicit_bzero.c */; };
 		2261379621F0E5C40097B3A0 /* bsd-setres_id.c in Sources */ = {isa = PBXBuildFile; fileRef = 2261379521F0E5C40097B3A0 /* bsd-setres_id.c */; };
@@ -883,8 +867,8 @@
 		22F6A25C20683F8500E618F9 /* tool_writeout.c in Sources */ = {isa = PBXBuildFile; fileRef = 225781161FDB4D380050F312 /* tool_writeout.c */; settings = {COMPILER_FLAGS = "-DHAVE_CONFIG_H -I curl/curl/include/ -I curl/curl/lib/ -I ./Frameworks/libssh2.framework/Headers"; }; };
 		22F6A25D20683F8600E618F9 /* tool_xattr.c in Sources */ = {isa = PBXBuildFile; fileRef = 225781181FDB4D380050F312 /* tool_xattr.c */; settings = {COMPILER_FLAGS = "-DHAVE_CONFIG_H -I curl/curl/include/ -I curl/curl/lib/ -DBUILDING_LIBCURL -I ./Frameworks/libssh2.framework/Headers"; }; };
 		22F6A25E20683F9B00E618F9 /* ios_system.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 223496AB1FD5FC71007ED1A9 /* ios_system.framework */; };
-		D212F98C25B066E9007F5D2D /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D212F98A25B066E9007F5D2D /* libssh2.xcframework */; };
-		D212F99725B06810007F5D2D /* openssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D212F99525B06810007F5D2D /* openssl.xcframework */; };
+		B503D1A42DDF1FB4003F8F56 /* ssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B503D1A22DDF1FB4003F8F56 /* ssh2.xcframework */; };
+		B503D1A52DDF1FB4003F8F56 /* openssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B503D1A32DDF1FB4003F8F56 /* openssl.xcframework */; };
 		D285143225B1D7CD003405B4 /* sshkey.h in Headers */ = {isa = PBXBuildFile; fileRef = D285143125B1D7CD003405B4 /* sshkey.h */; };
 		D285144425B1DE19003405B4 /* cipher.h in Headers */ = {isa = PBXBuildFile; fileRef = D285144325B1DE19003405B4 /* cipher.h */; };
 		D285145625B1DE61003405B4 /* ssherr.h in Headers */ = {isa = PBXBuildFile; fileRef = D285145525B1DE61003405B4 /* ssherr.h */; };
@@ -1298,22 +1282,6 @@
 		225E1B6B2067F39F005AC151 /* tar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = tar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		225E1B6D2067F39F005AC151 /* tar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tar.h; sourceTree = "<group>"; };
 		225E1B6E2067F39F005AC151 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		225E4F142C56989C00D5E1A9 /* wasm3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wasm3.c; sourceTree = "<group>"; };
-		225E4F162C569AB200D5E1A9 /* m3_compile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_compile.c; path = wasm3/source/m3_compile.c; sourceTree = SOURCE_ROOT; };
-		225E4F172C569AB200D5E1A9 /* m3_parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_parse.c; path = wasm3/source/m3_parse.c; sourceTree = SOURCE_ROOT; };
-		225E4F182C569AB200D5E1A9 /* m3_api_tracer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_api_tracer.c; path = wasm3/source/m3_api_tracer.c; sourceTree = SOURCE_ROOT; };
-		225E4F192C569AB300D5E1A9 /* m3_exec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_exec.c; path = wasm3/source/m3_exec.c; sourceTree = SOURCE_ROOT; };
-		225E4F1A2C569AB300D5E1A9 /* m3_bind.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_bind.c; path = wasm3/source/m3_bind.c; sourceTree = SOURCE_ROOT; };
-		225E4F1B2C569AB300D5E1A9 /* m3_info.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_info.c; path = wasm3/source/m3_info.c; sourceTree = SOURCE_ROOT; };
-		225E4F1C2C569AB300D5E1A9 /* m3_function.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_function.c; path = wasm3/source/m3_function.c; sourceTree = SOURCE_ROOT; };
-		225E4F1D2C569AB300D5E1A9 /* m3_module.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_module.c; path = wasm3/source/m3_module.c; sourceTree = SOURCE_ROOT; };
-		225E4F1E2C569AB300D5E1A9 /* m3_code.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_code.c; path = wasm3/source/m3_code.c; sourceTree = SOURCE_ROOT; };
-		225E4F1F2C569AB300D5E1A9 /* m3_env.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_env.c; path = wasm3/source/m3_env.c; sourceTree = SOURCE_ROOT; };
-		225E4F202C569AB300D5E1A9 /* m3_core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_core.c; path = wasm3/source/m3_core.c; sourceTree = SOURCE_ROOT; };
-		225E4F212C569AB300D5E1A9 /* m3_api_wasi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_api_wasi.c; path = wasm3/source/m3_api_wasi.c; sourceTree = SOURCE_ROOT; };
-		225E4F222C569AB400D5E1A9 /* m3_api_meta_wasi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_api_meta_wasi.c; path = wasm3/source/m3_api_meta_wasi.c; sourceTree = SOURCE_ROOT; };
-		225E4F232C569AB400D5E1A9 /* m3_api_uvwasi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_api_uvwasi.c; path = wasm3/source/m3_api_uvwasi.c; sourceTree = SOURCE_ROOT; };
-		225E4F242C569AB400D5E1A9 /* m3_api_libc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m3_api_libc.c; path = wasm3/source/m3_api_libc.c; sourceTree = SOURCE_ROOT; };
 		225F060A20163C2000466685 /* tee.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tee.c; path = shell_cmds/tee/tee.c; sourceTree = SOURCE_ROOT; };
 		225F060F2016751800466685 /* getopt_long.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = getopt_long.c; sourceTree = "<group>"; };
 		225F061120171B4300466685 /* ssh_main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ssh_main.c; sourceTree = "<group>"; };
@@ -1321,7 +1289,6 @@
 		2261379521F0E5C40097B3A0 /* bsd-setres_id.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "bsd-setres_id.c"; path = "ssh_keygen/openbsd-compat/bsd-setres_id.c"; sourceTree = "<group>"; };
 		2261379721F0E5DE0097B3A0 /* vis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vis.c; path = "ssh_keygen/openbsd-compat/vis.c"; sourceTree = "<group>"; };
 		2261379921F0E5FE0097B3A0 /* readpassphrase.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = readpassphrase.c; path = "ssh_keygen/openbsd-compat/readpassphrase.c"; sourceTree = "<group>"; };
-		226192702CD51B0E00D1199C /* wasmer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = wasmer.c; path = wasmer/wasmer.c; sourceTree = SOURCE_ROOT; };
 		226192722CD51CAB00D1199C /* libwasmer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwasmer.a; path = wasmer/libwasmer.a; sourceTree = "<group>"; };
 		2263780C1FDB3EE100AE8827 /* rmdir.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rmdir.c; sourceTree = "<group>"; };
 		2263780D1FDB3EE100AE8827 /* termcap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = termcap.h; sourceTree = SOURCE_ROOT; };
@@ -1541,6 +1508,8 @@
 		22F6A16920683D5200E618F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22F6A1AF20683F4100E618F9 /* curl_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = curl_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F6A1B220683F4100E618F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../curl_ios/Info.plist; sourceTree = "<group>"; };
+		B503D1A22DDF1FB4003F8F56 /* ssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ssh2.xcframework; sourceTree = "<group>"; };
+		B503D1A32DDF1FB4003F8F56 /* openssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = openssl.xcframework; sourceTree = "<group>"; };
 		D212F98A25B066E9007F5D2D /* libssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libssh2.xcframework; path = xcfs/.build/artifacts/xcfs/libssh2/libssh2.xcframework; sourceTree = "<group>"; };
 		D212F99525B06810007F5D2D /* openssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = openssl.xcframework; path = xcfs/.build/artifacts/xcfs/openssl/openssl.xcframework; sourceTree = "<group>"; };
 		D285143125B1D7CD003405B4 /* sshkey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sshkey.h; path = ssh_keygen/sshkey.h; sourceTree = "<group>"; };
@@ -1656,9 +1625,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D212F98C25B066E9007F5D2D /* libssh2.xcframework in Frameworks */,
 				22F6A25E20683F9B00E618F9 /* ios_system.framework in Frameworks */,
-				D212F99725B06810007F5D2D /* openssl.xcframework in Frameworks */,
+				B503D1A42DDF1FB4003F8F56 /* ssh2.xcframework in Frameworks */,
+				B503D1A52DDF1FB4003F8F56 /* openssl.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1757,6 +1726,8 @@
 		223497AB1FD6CF7A007ED1A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B503D1A32DDF1FB4003F8F56 /* openssl.xcframework */,
+				B503D1A22DDF1FB4003F8F56 /* ssh2.xcframework */,
 				226192722CD51CAB00D1199C /* libwasmer.a */,
 				224DF7332B757AE200F13C58 /* libresolv.9.tbd */,
 				22B114742817CABD00A5BF16 /* libtermcap.tbd */,
@@ -2255,43 +2226,12 @@
 			path = tar;
 			sourceTree = "<group>";
 		};
-		225E4F132C56986F00D5E1A9 /* wasm3 */ = {
-			isa = PBXGroup;
-			children = (
-				225E4F142C56989C00D5E1A9 /* wasm3.c */,
-				225E4F242C569AB400D5E1A9 /* m3_api_libc.c */,
-				225E4F222C569AB400D5E1A9 /* m3_api_meta_wasi.c */,
-				225E4F182C569AB200D5E1A9 /* m3_api_tracer.c */,
-				225E4F232C569AB400D5E1A9 /* m3_api_uvwasi.c */,
-				225E4F212C569AB300D5E1A9 /* m3_api_wasi.c */,
-				225E4F1A2C569AB300D5E1A9 /* m3_bind.c */,
-				225E4F1E2C569AB300D5E1A9 /* m3_code.c */,
-				225E4F162C569AB200D5E1A9 /* m3_compile.c */,
-				225E4F202C569AB300D5E1A9 /* m3_core.c */,
-				225E4F1F2C569AB300D5E1A9 /* m3_env.c */,
-				225E4F192C569AB300D5E1A9 /* m3_exec.c */,
-				225E4F1C2C569AB300D5E1A9 /* m3_function.c */,
-				225E4F1B2C569AB300D5E1A9 /* m3_info.c */,
-				225E4F1D2C569AB300D5E1A9 /* m3_module.c */,
-				225E4F172C569AB200D5E1A9 /* m3_parse.c */,
-			);
-			name = wasm3;
-			sourceTree = "<group>";
-		};
 		225F060920163BFC00466685 /* tee */ = {
 			isa = PBXGroup;
 			children = (
 				225F060A20163C2000466685 /* tee.c */,
 			);
 			path = tee;
-			sourceTree = "<group>";
-		};
-		2261926F2CD5184900D1199C /* wasmer */ = {
-			isa = PBXGroup;
-			children = (
-				226192702CD51B0E00D1199C /* wasmer.c */,
-			);
-			path = wasmer;
 			sourceTree = "<group>";
 		};
 		226378091FDB3EC700AE8827 /* file_cmds_ios */ = {
@@ -2498,8 +2438,6 @@
 		226378CA1FDB3F2B00AE8827 /* shell_cmds_ios */ = {
 			isa = PBXGroup;
 			children = (
-				2261926F2CD5184900D1199C /* wasmer */,
-				225E4F132C56986F00D5E1A9 /* wasm3 */,
 				2276339E29B0A5DE00DBF1C6 /* stty */,
 				22F0803620973712003C3BF0 /* sleep.c */,
 				221CD98D21E8B03D00F3B47C /* open.m */,
@@ -3955,33 +3893,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				225E4F302C569AB400D5E1A9 /* m3_api_wasi.c in Sources */,
 				22C505872098ADD800FDDFA9 /* ls.c in Sources */,
 				227633AC29B0A61B00DBF1C6 /* util.c in Sources */,
 				222CC4DC218CBF2300D3A11C /* strnsubst.c in Sources */,
 				22F6A11E2068395B00E618F9 /* fmt.c in Sources */,
-				225E4F292C569AB400D5E1A9 /* m3_bind.c in Sources */,
 				22F6A1212068395B00E618F9 /* w.c in Sources */,
 				227633A229B0A60500DBF1C6 /* gfmt.c in Sources */,
 				227633A829B0A60E00DBF1C6 /* print.c in Sources */,
 				22C505882098ADD800FDDFA9 /* misc.c in Sources */,
-				225E4F2C2C569AB400D5E1A9 /* m3_module.c in Sources */,
-				225E4F282C569AB400D5E1A9 /* m3_exec.c in Sources */,
-				225E4F332C569AB400D5E1A9 /* m3_api_libc.c in Sources */,
 				227633A729B0A60E00DBF1C6 /* key.c in Sources */,
-				225E4F2E2C569AB400D5E1A9 /* m3_env.c in Sources */,
-				225E4F2B2C569AB400D5E1A9 /* m3_function.c in Sources */,
 				227633A029B0A5FE00DBF1C6 /* cchar.c in Sources */,
 				22F6A11A2068394B00E618F9 /* id.c in Sources */,
 				22D0BD3E297A7CE2006907FC /* jsc.swift in Sources */,
 				22C5058A2098ADD800FDDFA9 /* function.c in Sources */,
 				22F6A11F2068395B00E618F9 /* pr_time.c in Sources */,
 				22C5058B2098ADD800FDDFA9 /* operator.c in Sources */,
-				225E4F152C56989C00D5E1A9 /* wasm3.c in Sources */,
 				224DF7532B7956FF00F13C58 /* basename.c in Sources */,
 				22C5058C2098ADD800FDDFA9 /* main.c in Sources */,
 				22F6A1202068395B00E618F9 /* proc_compare.c in Sources */,
-				225E4F252C569AB400D5E1A9 /* m3_compile.c in Sources */,
 				224DF7512B7945E600F13C58 /* dirname.c in Sources */,
 				22F6A11B2068394E00E618F9 /* printenv.c in Sources */,
 				224B48F4279491FE00D310A8 /* source.swift in Sources */,
@@ -3989,24 +3918,17 @@
 				22F6A11C2068395200E618F9 /* pwd.c in Sources */,
 				227633A629B0A60E00DBF1C6 /* modes.c in Sources */,
 				22C505862098ADD800FDDFA9 /* find.c in Sources */,
-				225E4F262C569AB400D5E1A9 /* m3_parse.c in Sources */,
 				227633AA29B0A61500DBF1C6 /* stty.c in Sources */,
-				225E4F2F2C569AB400D5E1A9 /* m3_core.c in Sources */,
-				225E4F2A2C569AB400D5E1A9 /* m3_info.c in Sources */,
-				225E4F312C569AB400D5E1A9 /* m3_api_meta_wasi.c in Sources */,
 				22F6A1172068394200E618F9 /* vary.c in Sources */,
 				22C505852098ADD800FDDFA9 /* y.tab.c in Sources */,
-				225E4F2D2C569AB400D5E1A9 /* m3_code.c in Sources */,
 				22F6A1182068394700E618F9 /* env.c in Sources */,
 				22F6A1162068394200E618F9 /* date.c in Sources */,
-				225E4F272C569AB400D5E1A9 /* m3_api_tracer.c in Sources */,
 				22F6A1142068393900E618F9 /* tee.c in Sources */,
 				22D99CC325AB5C83007F56C9 /* sleep.c in Sources */,
 				22F6A11D2068395600E618F9 /* uname.c in Sources */,
 				222CC4DF218CBF2900D3A11C /* xargs.c in Sources */,
 				22F6A1192068394700E618F9 /* envopts.c in Sources */,
 				22C505892098ADD800FDDFA9 /* option.c in Sources */,
-				225E4F322C569AB400D5E1A9 /* m3_api_uvwasi.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4380,6 +4302,7 @@
 		223496B11FD5FC71007ED1A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -4414,6 +4337,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				EXCLUDED_ARCHS = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -4438,6 +4362,8 @@
 					"-Wincompatible-pointer-types-discards-qualifiers",
 				);
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -4447,6 +4373,7 @@
 		223496B21FD5FC71007ED1A9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -4481,6 +4408,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXCLUDED_ARCHS = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -4498,6 +4426,8 @@
 					"-Wincompatible-pointer-types-discards-qualifiers",
 				);
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -5416,6 +5346,8 @@
 				OTHER_LDFLAGS = (
 					"-Xlinker",
 					"-no_fixup_chains",
+					"-undefined",
+					dynamic_lookup,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.ssh-cmd";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -5466,6 +5398,8 @@
 				OTHER_LDFLAGS = (
 					"-Xlinker",
 					"-no_fixup_chains",
+					"-undefined",
+					dynamic_lookup,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.ssh-cmd";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

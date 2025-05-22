@@ -47,7 +47,7 @@
 #include "kex.h"
 #include "ssh-gss.h"
 #include "monitor_wrap.h"
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #undef PRIVSEP
 #define PRIVSEP(x)    (x)
 #endif
@@ -267,7 +267,7 @@ input_gssapi_exchange_complete(int type, u_int32_t plen, struct ssh *ssh)
 
 	authenticated = PRIVSEP(ssh_gssapi_userok(authctxt->user));
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     // on iOS, use_privsep is always false (technically impossible)
 	if ((!use_privsep || mm_is_monitor()) &&
 #else
@@ -323,7 +323,7 @@ input_gssapi_mic(int type, u_int32_t plen, struct ssh *ssh)
 	sshbuf_free(b);
 	free(mic.value);
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     // on iOS, use_privsep is always false (technically impossible)
 	if ((!use_privsep || mm_is_monitor()) &&
 #else

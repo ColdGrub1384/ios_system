@@ -123,7 +123,7 @@
 #include "progressmeter.h"
 #include "utf8.h"
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #define __progname ssh_progname
 #endif
 
@@ -148,7 +148,7 @@ __thread char *curfile;
 /* This is set to non-zero to enable verbose mode. */
 __thread int verbose_mode = 0;
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 // Avoid name collision with sftp
 #define showprogress scp_showprogress
 #endif
@@ -213,14 +213,18 @@ do_local_cmd(arglist *a)
 			fmprintf(stderr, " %s", a->list[i]);
 		fprintf(stderr, "\n");
 	}
-	if ((pid = fork()) == -1)
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+	if ((pid = ios_fork()) == -1)
+#else
+    if ((pid = fork()) == -1)
+#endif
 		fatal("do_local_cmd: fork: %s", strerror(errno));
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (pid == 0) {
 #endif
 		execvp(a->list[0], a->list);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		perror(a->list[0]);
 		exit(1);
 	}
@@ -284,8 +288,12 @@ do_cmd(char *host, char *remuser, int port, char *cmd, int *fdin, int *fdout)
 	ssh_signal(SIGTTOU, suspchild);
 
 	/* Fork a child to execute the command on the remote host using ssh. */
-	do_cmd_pid = fork();
-#if !TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+	do_cmd_pid = ios_fork();
+#else
+    do_cmd_pid = fork();
+#endif
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (do_cmd_pid == 0) {
 		/* Child. */
 		close(pin[1]);
@@ -293,7 +301,7 @@ do_cmd(char *host, char *remuser, int port, char *cmd, int *fdin, int *fdout)
 #endif
 		dup2(pin[0], 0);
 		dup2(pout[1], 1);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		close(pin[0]);
 		close(pout[1]);
 #endif
@@ -312,7 +320,7 @@ do_cmd(char *host, char *remuser, int port, char *cmd, int *fdin, int *fdout)
 		addargs(&args, "%s", cmd);
 
 		execvp(ssh_program, args.list);
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
         *fdout = pin[1];
         *fdin = pout[0];
 #else
@@ -354,8 +362,12 @@ do_cmd2(char *host, char *remuser, int port, char *cmd, int fdin, int fdout)
 		port = sshport;
 
 	/* Fork a child to execute the command on the remote host using ssh. */
-	pid = fork();
-#if !TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+	pid = ios_fork();
+#else
+    pid = fork();
+#endif
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (pid == 0) {
 #endif
 		dup2(fdin, 0);
@@ -376,7 +388,7 @@ do_cmd2(char *host, char *remuser, int port, char *cmd, int fdin, int fdout)
 		addargs(&args, "%s", cmd);
 
 		execvp(ssh_program, args.list);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         perror(ssh_program);
 		exit(1);
 	} else if (pid == -1) {
@@ -613,7 +625,7 @@ scp_main(int argc, char **argv)
 		    (void) close(remin);
 		if (remout != -1)
 		    (void) close(remout);
-//#if !TARGET_OS_IPHONE
+//#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         // Experimental: don't wait for ssh to finish because ssh waits for scp to finish.
         if (waitpid(do_cmd_pid, &status, 0) == -1)
 			errs = 1;
@@ -978,7 +990,7 @@ toremote(int argc, char **argv)
 			if (do_cmd2(thost, tuser, tport, bp, remin, remout) < 0)
 				exit(1);
 			free(bp);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 			(void) close(remin);
 			(void) close(remout);
 			remin = remout = -1;
@@ -1090,7 +1102,7 @@ tolocal(int argc, char **argv)
 		}
 		free(bp);
 		sink(1, argv + argc - 1, src);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		(void) close(remin);
 		remin = remout = -1;
 #endif

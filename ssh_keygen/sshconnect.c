@@ -79,7 +79,7 @@ static __thread pid_t proxy_command_pid = 0;
 /* import */
 extern __thread int debug_flag;
 extern Options options;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 extern char *__progname;
 #else
 extern __thread char *ssh_progname;
@@ -135,8 +135,8 @@ ssh_proxy_fdpass_connect(struct ssh *ssh, const char *host,
 	debug("Executing proxy dialer command: %.500s", command_string);
 
 	/* Fork and execute the proxy command. */
-#if TARGET_OS_IPHONE
-    pid = fork();
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+    pid = ios_fork();
     // child process first:
     /* Redirect stdin and stdout. */
     if (sp[0] != 0) {
@@ -210,14 +210,14 @@ ssh_proxy_fdpass_connect(struct ssh *ssh, const char *host,
 	/* Parent. */
 	if (pid == -1)
 		fatal("fork failed: %.100s", strerror(errno));
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	close(sp[0]);
 #endif
 	free(command_string);
 
 	if ((sock = mm_receive_fd(sp[1])) == -1)
 		fatal("proxy dialer did not pass back a connection");
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     close(sp[0]);
 #endif
 
@@ -225,7 +225,7 @@ ssh_proxy_fdpass_connect(struct ssh *ssh, const char *host,
 		if (errno != EINTR)
 			fatal("Couldn't wait for child: %s", strerror(errno));
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     close(sp[0]);
     close(sp[0]);
 #endif
@@ -261,8 +261,8 @@ ssh_proxy_connect(struct ssh *ssh, const char *host, const char *host_arg,
 	debug("Executing proxy command: %.500s", command_string);
 
 	/* Fork and execute the proxy command. */
-#if TARGET_OS_IPHONE
-    pid = fork();
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+    pid = ios_fork();
     char *argv[2];
 
     /* Redirect stdin and stdout. */
@@ -337,7 +337,7 @@ ssh_proxy_connect(struct ssh *ssh, const char *host, const char *host_arg,
 	else
 		proxy_command_pid = pid; /* save pid to clean up later */
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	/* Close child side of the descriptors. */
 	close(pin[0]);
 	close(pout[1]);
@@ -1741,11 +1741,19 @@ ssh_local_cmd(const char *args)
 		shell = _PATH_BSHELL;
 
 	osighand = ssh_signal(SIGCHLD, SIG_DFL);
-	pid = fork();
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_MACCATALYST
+	pid = ios_fork();
+#else
+    pid = fork();
+#endif
 	if (pid == 0) {
 		ssh_signal(SIGPIPE, SIG_DFL);
 		debug3("Executing %s -c \"%s\"", shell, args);
-		execl(shell, shell, "-c", args, (char *)NULL);
+#if TARGET_OS_WATCH || TARGET_OS_TV
+#else
+        execl(shell, shell, "-c", args, (char *)NULL);
+#endif
+        
 		error("Couldn't execute %s -c \"%s\": %s",
 		    shell, args, strerror(errno));
 		_exit(1);

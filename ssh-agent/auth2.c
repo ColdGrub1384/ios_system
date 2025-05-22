@@ -59,7 +59,7 @@
 #include "monitor_wrap.h"
 #include "digest.h"
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #undef PRIVSEP
 #define PRIVSEP(x)    (x)
 #endif
@@ -306,7 +306,7 @@ input_userauth_request(int type, u_int32_t seq, struct ssh *ssh)
 		    use_privsep ? " [net]" : "");
 		authctxt->service = xstrdup(service);
 		authctxt->style = style ? xstrdup(style) : NULL;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		if (use_privsep)
 			mm_inform_authserv(service, style);
 #endif

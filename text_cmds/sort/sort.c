@@ -467,7 +467,7 @@ sig_handler(int sig __unused, siginfo_t *siginfo __unused,
 static void
 set_signal_handler(void)
 {
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     if (canSetSignal()) {
 #endif
 	struct sigaction sa;
@@ -512,7 +512,7 @@ set_signal_handler(void)
 		perror("sigaction");
 		return;
 	}
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     }
 #endif
 }

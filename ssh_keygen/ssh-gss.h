@@ -33,7 +33,7 @@
 #elif defined(HAVE_GSSAPI_GSSAPI_H)
 #include <gssapi/gssapi.h>
 #endif
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_MACCATALYST
 #include <GSS/gssapi.h>
 #endif
 

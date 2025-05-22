@@ -116,7 +116,7 @@ struct complete_ctx {
 int remote_glob(struct sftp_conn *, const char *, int,
     int (*)(const char *, int), glob_t *); /* proto for sftp-glob.c */
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #define __progname ssh_progname
 #endif
 extern __thread char *__progname;
@@ -328,27 +328,31 @@ local_do_shell(const char *args)
 	if ((shell = getenv("SHELL")) == NULL || *shell == '\0')
 		shell = _PATH_BSHELL;
 
-	if ((pid = fork()) == -1)
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+	if ((pid = ios_fork()) == -1)
+#else
+    if ((pid = fork()) == -1)
+#endif
 		fatal("Couldn't fork: %s", strerror(errno));
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     if (pid == 0) {
 #endif
 		/* XXX: child has pipe fds to ssh subproc open - issue? */
 		if (args) {
 			debug3("Executing %s -c \"%s\"", shell, args);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 			execl(shell, shell, "-c", args, (char *)NULL);
 #else
             ios_execv(shell, &args);
 #endif
 		} else {
 			debug3("Executing %s", shell);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 			execl(shell, shell, (char *)NULL);
 #endif
         }
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         fprintf(stderr, "Couldn't execute \"%s\": %s\n", shell,
 		    strerror(errno));
 		_exit(1);
@@ -830,7 +834,7 @@ do_ls_dir(struct sftp_conn *conn, const char *path,
 		m += strlen(tmp);
 		free(tmp);
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		if (ioctl(fileno(stdin), TIOCGWINSZ, &ws) != -1)
 			width = ws.ws_col;
 #else
@@ -966,7 +970,7 @@ do_globbed_ls(struct sftp_conn *conn, const char *path,
 		return err;
 	}
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     if (ioctl(fileno(stdin), TIOCGWINSZ, &ws) != -1)
 		width = ws.ws_col;
 #else
@@ -1643,7 +1647,7 @@ parse_dispatch_command(struct sftp_conn *conn, const char *cmd, char **pwd,
 		break;
 	case I_LCHDIR:
 		if (path1 == NULL || *path1 == '\0')
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 			path1 = xstrdup("~");
 #else
             path1 = xstrdup("~/Documents/");
@@ -1794,7 +1798,7 @@ complete_display(char **list, u_int len)
 	for (y = 0; list[y]; y++)
 		m = MAXIMUM(m, strlen(list[y]));
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (ioctl(fileno(stdin), TIOCGWINSZ, &ws) != -1)
 		width = ws.ws_col;
 #else
@@ -2229,7 +2233,7 @@ interactive_loop(struct sftp_conn *conn, char *file1, char *file2)
 	setvbuf(infile, NULL, _IOLBF, 0);
 
 	interactive = !batchmode && isatty(STDIN_FILENO);
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     if (interactive)
         ios_stopInteractive();
 #endif
@@ -2315,9 +2319,14 @@ connect_to_server(char *path, char **args, int *in, int *out)
 	c_in = c_out = inout[1];
 #endif /* USE_PIPES */
 
-	if ((sshpid = fork()) == -1)
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+	if ((sshpid = ios_fork()) == -1)
 		fatal("fork: %s", strerror(errno));
-#if !TARGET_OS_IPHONE
+#else
+    if ((sshpid = fork()) == -1)
+        fatal("fork: %s", strerror(errno));
+#endif
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	else if (sshpid == 0) {
 #endif
 		if ((dup2(c_in, STDIN_FILENO) == -1) ||
@@ -2325,7 +2334,7 @@ connect_to_server(char *path, char **args, int *in, int *out)
 			fprintf(stderr, "dup2: %s\n", strerror(errno));
 			_exit(1);
 		}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		close(*in);
 		close(*out);
 		close(c_in);
@@ -2342,7 +2351,7 @@ connect_to_server(char *path, char **args, int *in, int *out)
 		ssh_signal(SIGINT, SIG_IGN);
 		ssh_signal(SIGTERM, SIG_DFL);
 		execvp(path, args);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		fprintf(stderr, "exec: %s: %s\n", path, strerror(errno));
 		_exit(1);
 	}
@@ -2355,7 +2364,7 @@ connect_to_server(char *path, char **args, int *in, int *out)
 	ssh_signal(SIGTTIN, suspchild);
 	ssh_signal(SIGTTOU, suspchild);
 	ssh_signal(SIGCHLD, sigchld_handler);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	close(c_in);
 	close(c_out);
 #endif
@@ -2409,7 +2418,7 @@ sftp_main(int argc, char **argv)
 	addargs(&args, "-oClearAllForwardings yes");
 
 	ll = SYSLOG_LEVEL_INFO;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     infile = stdin;
 #else
     infile = thread_stdin;
@@ -2617,7 +2626,7 @@ sftp_main(int argc, char **argv)
 		fclose(infile);
 
 // ssh waits for sftp in ios_system::cleanup_function, so this ends in an infinite loop
-//#if !TARGET_OS_IPHONE
+//#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     while (waitpid(sshpid, NULL, 0) == -1 && sshpid > 1)
 		if (errno != EINTR)
 			fatal("Couldn't wait for ssh process: %s",

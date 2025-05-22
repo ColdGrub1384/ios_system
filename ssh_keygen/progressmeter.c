@@ -41,7 +41,7 @@
 #include "atomicio.h"
 #include "misc.h"
 #include "utf8.h"
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #include <stdlib.h>
 #endif
 
@@ -84,7 +84,7 @@ static const char unit[] = " KMGT";
 static int
 can_output(void)
 {
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     return (getpgrp() == tcgetpgrp(STDOUT_FILENO));
 #else
     return (ios_isatty(STDOUT_FILENO));
@@ -135,7 +135,7 @@ refresh_progress_meter(int force_update)
 	int hours, minutes, seconds;
 	int file_len;
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     // Not initialized:
     if ((counter == NULL) || (file == NULL))
         return;
@@ -156,7 +156,7 @@ refresh_progress_meter(int force_update)
 
 	transferred = *counter - (cur_pos ? cur_pos : start_pos);
 	cur_pos = *counter;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     now = monotime_double();
 #endif
 	bytes_left = end_pos - cur_pos;
@@ -305,7 +305,7 @@ setscreensize(void)
 {
 	struct winsize winsize;
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &winsize) != -1 &&
         winsize.ws_col != 0) {
         if (winsize.ws_col > MAX_WINSIZE)

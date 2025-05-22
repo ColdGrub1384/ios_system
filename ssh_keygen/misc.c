@@ -1124,7 +1124,7 @@ tilde_expand_filename(const char *filename, uid_t uid)
 			fatal("tilde_expand_filename: No such user %s", user);
 	} else if ((pw = getpwuid(uid)) == NULL)	/* ~/path */
 		fatal("tilde_expand_filename: No such uid %ld", (long)uid);
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     if (getenv("HOME"))
         pw->pw_dir = getenv("HOME");
 #endif
@@ -1402,7 +1402,7 @@ tun_open(int tun, int mode, char **ifname)
 void
 sanitise_stdfd(void)
 {
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     // The key assumption here is that stdin, stdout, stderr are 0-1-2.
     // This is not the case in iOS-system, and we can have opened file descriptors
     // smaller than fileno(stderr). On the other hand, ios_system has opened all fds
@@ -2595,7 +2595,11 @@ subprocess(const char *tag, const char *command,
 	if (restore_privs != NULL)
 		restore_privs();
 
-	switch ((pid = fork())) {
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+	switch ((pid = ios_fork())) {
+#else
+    switch ((pid = fork())) {
+#endif
 	case -1: /* error */
 		error("%s: fork: %s", tag, strerror(errno));
 		close(p[0]);
@@ -2637,7 +2641,7 @@ subprocess(const char *tag, const char *command,
 			error("%s: dup2: %s", tag, strerror(errno));
 			_exit(1);
 		}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		closefrom(STDERR_FILENO + 1);
 #endif
 
@@ -2653,7 +2657,7 @@ subprocess(const char *tag, const char *command,
 		}
 		/* stdin is pointed to /dev/null at this point */
 		if ((flags & SSH_SUBPROCESS_STDOUT_DISCARD) != 0 &&
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
             dup2(STDIN_FILENO, STDERR_FILENO) == -1) {
 #else
             // We have redefined STDIN_FILENO & STDERR_FILENO in includes.h, but need the original version here:

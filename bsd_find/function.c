@@ -665,7 +665,7 @@ doexec:	if ((plan->flags & F_NEEDOK) && !queryuser(plan->e_argv))
 	fflush(stdout);
 	fflush(stderr);
 
-	switch (pid = fork()) {
+	switch (pid = ios_fork()) {
 	case -1:
 		err(1, "fork");
 		/* NOTREACHED */
@@ -750,7 +750,7 @@ c_exec(OPTION *option, char ***argvp)
 		}
 		argmax -= 1024;
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		for (ep = environ; *ep != NULL; ep++)
 #else
         for (ep = environmentVariables(ios_currentPid()); *ep != NULL; ep++)

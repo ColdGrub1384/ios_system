@@ -125,7 +125,7 @@
 #include "sk-api.h"
 #include "srclimit.h"
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 // Functions that do nothing if current user is not root, set up to do nothing if current user is not root
 void temporarily_use_uid(struct passwd *pw) { }
 void restore_uid(void) { }
@@ -150,7 +150,7 @@ extern char *__progname;
 ServerOptions options;
 
 /* Name of the server configuration file. */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 char *config_file_name = _PATH_SERVER_CONFIG_FILE;
 #else
 char *config_file_name = "none";
@@ -1315,7 +1315,7 @@ server_accept_loop(int *sock_in, int *sock_out, int *newsock, int *config_s)
 				return;
 			}
 
-#if !TARGET_OS_IPHONE // not debug mode, commented
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST // not debug mode, commented
 			/*
 			 * Normal production daemon.  Fork, and have
 			 * the child process the connection. The
@@ -1544,7 +1544,7 @@ sshd_main(int ac, char **av)
 	Authctxt *authctxt;
 	struct connection_info *connection_info = NULL;
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     debug_flag = 1;  // always use debug mode
     use_privsep = PRIVSEP_OFF; // no way to have privilege separation anyway
     rexec_flag = 0; // do not re-execute sshd
@@ -1564,7 +1564,7 @@ sshd_main(int ac, char **av)
 		saved_argv[i] = xstrdup(av[i]);
 	saved_argv[i] = NULL;
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 #ifndef HAVE_SETPROCTITLE
 	/* Prepare for later setproctitle emulation */
 	compat_init_setproctitle(ac, av);
@@ -1583,7 +1583,7 @@ sshd_main(int ac, char **av)
 	/* Initialize configuration options to their default values. */
 	initialize_server_options(&options);
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     options.log_level = SYSLOG_LEVEL_DEBUG1;
 #endif
 
@@ -1700,7 +1700,7 @@ sshd_main(int ac, char **av)
 		rexec_flag = 0;
 	if (!test_flag && rexec_flag && !path_absolute(av[0]))
 		fatal("sshd re-exec requires execution with an absolute path");
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (rexeced_flag)
 		closefrom(REEXEC_MIN_FREE_FD);
 	else
@@ -2237,7 +2237,7 @@ sshd_main(int ac, char **av)
 		fatal_f("sshbuf_new failed");
 	auth_debug_reset();
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (use_privsep) {
 		if (privsep_preauth(ssh) == 1)
 			goto authenticated;
@@ -2259,7 +2259,7 @@ sshd_main(int ac, char **av)
 	 * If we use privilege separation, the unprivileged child transfers
 	 * the current keystate and exits
 	 */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (use_privsep) {
 		mm_send_keystate(ssh, pmonitor);
 		ssh_packet_clear_keys(ssh);
@@ -2302,7 +2302,7 @@ sshd_main(int ac, char **av)
 	 * In privilege separation, we fork another child and prepare
 	 * file descriptor passing.
 	 */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (use_privsep) {
 		privsep_postauth(ssh, authctxt);
 		/* the monitor process [priv] will not return */
@@ -2336,7 +2336,7 @@ sshd_main(int ac, char **av)
 
 	ssh_packet_close(ssh);
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (use_privsep)
 		mm_terminate();
 #endif
@@ -2351,7 +2351,7 @@ sshd_hostkey_sign(struct ssh *ssh, struct sshkey *privkey,
 {
 	int r;
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (use_privsep) {
 		if (privkey) {
 			if (mm_sshkey_sign(ssh, privkey, signature, slenp,

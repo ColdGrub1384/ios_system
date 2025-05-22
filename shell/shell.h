@@ -6,7 +6,11 @@
 //  Copyright © 2018 Nicolas Holzschuch. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE || TARGET_OS_MACCATALYST
 #import <UIKit/UIKit.h>
+#else
+#import <Foundation/Foundation.h>
+#endif
 
 //! Project version number for shell.
 FOUNDATION_EXPORT double shellVersionNumber;

@@ -55,7 +55,7 @@
 #include "tool_libinfo.h"
 #include "tool_stderr.h"
 #include <TargetConditionals.h>
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #include "ios_error.h"
 #undef stderr
 #define stderr thread_stderr
@@ -255,7 +255,7 @@ static void main_free(struct GlobalConfig *config)
 #endif
 int wmain(int argc, wchar_t *argv[])
 #else
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 int curl_main(int argc, char *argv[])
 #else
 int main(int argc, char *argv[])

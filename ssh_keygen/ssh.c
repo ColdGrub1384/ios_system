@@ -113,6 +113,10 @@
 #include "ssh-pkcs11.h"
 #endif
 
+extern __thread FILE* thread_stdin;
+extern __thread FILE* thread_stdout;
+extern __thread FILE* thread_stderr;
+
 extern __thread char *ssh_progname;
 
 /* Saves a copy of argv for setproctitle emulation */
@@ -149,7 +153,7 @@ __thread int ostdin_null_flag, ono_shell_flag, otty_flag, orequest_tty;
  * so that the passphrase can be entered manually, and then ssh goes to the
  * background.
  */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 int fork_after_authentication_flag = 0;
 #endif
 
@@ -657,7 +661,7 @@ ssh_main(int ac, char **av)
 
 	ssh_progname = ssh_get_progname(av[0]);
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 #ifndef HAVE_SETPROCTITLE
 	/* Prepare for later setproctitle emulation */
 	/* Save argv so it isn't clobbered by setproctitle() emulation */
@@ -676,7 +680,7 @@ ssh_main(int ac, char **av)
 	 * Discard other fds that are hanging around. These can cause problem
 	 * with backgrounded ssh processes started by ControlPersist.
 	 */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     closefrom(STDERR_FILENO + 1);
 #endif
 
@@ -686,7 +690,7 @@ ssh_main(int ac, char **av)
 		logit("No user exists for uid %lu", (u_long)getuid());
 		exit(255);
 	}
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     if (getenv("HOME"))
         pw->pw_dir = getenv("HOME");
 #endif
@@ -741,7 +745,7 @@ ssh_main(int ac, char **av)
 		case 'n':
 			stdin_null_flag = 1;
 			break;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
             case 'f':
 			fork_after_authentication_flag = 1;
 			stdin_null_flag = 1;
@@ -1344,7 +1348,7 @@ ssh_main(int ac, char **av)
 	if (sshbuf_len(command) != 0 && options.remote_command != NULL)
 		fatal("Cannot execute command-line and remote command.");
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     /* Cannot fork to background if no command. */
 	if (fork_after_authentication_flag && sshbuf_len(command) == 0 &&
 	    options.remote_command == NULL && !no_shell_flag)
@@ -1722,7 +1726,7 @@ ssh_main(int ac, char **av)
 	return exit_status;
 }
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 static void
 control_persist_detach(void)
 {
@@ -1761,7 +1765,7 @@ control_persist_detach(void)
 #endif
 
 /* Do fork() after authentication. Used by "ssh -f" */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 static void
 fork_postauth(void)
 {
@@ -1850,7 +1854,7 @@ ssh_confirm_remote_forward(struct ssh *ssh, int type, u_int32_t seq, void *ctxt)
 				    "for listen port %d", rfwd->listen_port);
 		}
 	}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	forwarding_success();
 #endif
 }
@@ -1879,7 +1883,7 @@ ssh_tun_confirm(struct ssh *ssh, int id, int success, void *arg)
 	}
 
 	debug_f("tunnel forward established, id=%d", id);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	forwarding_success();
 #endif
 }
@@ -2046,7 +2050,7 @@ ssh_session2_setup(struct ssh *ssh, int id, int success, void *arg)
 	if (!success)
 		return; /* No need for error message, channels code sens one */
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	display = getenv("DISPLAY");
 	if (display == NULL && options.forward_x11)
 		debug("X11 forwarding requested but DISPLAY not set");
@@ -2076,7 +2080,7 @@ ssh_session2_setup(struct ssh *ssh, int id, int success, void *arg)
 	ssh_packet_set_interactive(ssh, interactive,
 	    options.ip_qos_interactive, options.ip_qos_bulk);
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	client_session2_setup(ssh, id, tty_flag, subsystem_flag, getenv("TERM"),
 	    NULL, fileno(stdin), command, environ);
 #else
@@ -2178,11 +2182,11 @@ ssh_session2(struct ssh *ssh, const struct ssh_conn_info *cinfo)
 		stdin_null_flag = 1;
 		no_shell_flag = 1;
 		tty_flag = 0;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         if (!fork_after_authentication_flag)
 #endif
 			need_controlpersist_detach = 1;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		fork_after_authentication_flag = 1;
 #endif
 	}
@@ -2231,7 +2235,7 @@ ssh_session2(struct ssh *ssh, const struct ssh_conn_info *cinfo)
 	 * If requested and we are not interested in replies to remote
 	 * forwarding requests, then let ssh continue in the background.
 	 */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     if (fork_after_authentication_flag) {
 		if (options.exit_on_forward_failure &&
 		    options.num_remote_forwards > 0) {

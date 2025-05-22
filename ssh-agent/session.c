@@ -97,7 +97,7 @@
 #include "sftp.h"
 #include "atomicio.h"
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #undef PRIVSEP
 #define PRIVSEP(x)    (x)
 void record_login(pid_t pid, const char *tty, const char *user, uid_t uid,
@@ -565,7 +565,7 @@ do_exec_no_pty(struct ssh *ssh, Session *s, const char *command)
 	return 0;
 }
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 /*
  * This is called to fork and execute a command when we have a tty.  This
  * will call do_child from the child, and server_loop from the parent after
@@ -735,7 +735,7 @@ do_exec(struct ssh *ssh, Session *s, const char *command)
 		PRIVSEP(audit_run_command(shell));
 	}
 #endif
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (s->ttyfd != -1)
 		ret = do_exec_pty(ssh, s, command);
     else
@@ -1374,7 +1374,7 @@ safely_chroot(const char *path, uid_t uid)
 	verbose("Changed root directory to \"%s\"", path);
 }
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 /* Set login name, uid, gid, and groups. */
 void
 do_setusercontext(struct passwd *pw)
@@ -1524,7 +1524,7 @@ child_close_fds(struct ssh *ssh)
 	 * initgroups, because at least on Solaris 2.3 it leaves file
 	 * descriptors open.
 	 */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	closefrom(STDERR_FILENO + 1);
 #endif
 }
@@ -1550,7 +1550,7 @@ do_child(struct ssh *ssh, Session *s, const char *command)
 	destroy_sensitive_data();
 	ssh_packet_clear_keys(ssh);
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	/* Force a password change */
 	if (s->authctxt->force_pwchange) {
 		do_setusercontext(pw);
@@ -1572,7 +1572,7 @@ do_child(struct ssh *ssh, Session *s, const char *command)
 	/* When PAM is enabled we rely on it to do the nologin check */
 	if (!options.use_pam)
 		do_nologin(pw);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	do_setusercontext(pw);
 #endif
 	/*
@@ -1664,7 +1664,7 @@ do_child(struct ssh *ssh, Session *s, const char *command)
 			exit(1);
 	}
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	closefrom(STDERR_FILENO + 1);
 #endif
 
@@ -2183,7 +2183,7 @@ session_signal_req(struct ssh *ssh, Session *s)
 		    signame, s->forced ? "forced-command" : "subsystem");
 		goto out;
 	}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (!use_privsep || mm_is_monitor())
 #endif
     {
@@ -2252,7 +2252,7 @@ session_input_channel_req(struct ssh *ssh, Channel *c, const char *rtype)
 			success = session_exec_req(ssh, s);
 		}
         // I don't see how to execute any of these on iOS:
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         else if (strcmp(rtype, "pty-req") == 0) {
 			success = session_pty_req(ssh, s);
 		} else if (strcmp(rtype, "x11-req") == 0) {
@@ -2266,7 +2266,7 @@ session_input_channel_req(struct ssh *ssh, Channel *c, const char *rtype)
 		}
 #endif
 	}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (strcmp(rtype, "window-change") == 0) {
 		success = session_window_change_req(ssh, s);
 	} else if (strcmp(rtype, "break") == 0) {
@@ -2315,7 +2315,7 @@ session_pty_cleanup2(Session *s)
 	if (s->pid != 0)
 		record_logout(s->pid, s->tty, s->pw->pw_name);
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	/* Release the pseudo-tty. */
 	if (getuid() == 0)
 		pty_release(s->tty);
@@ -2737,7 +2737,7 @@ do_cleanup(struct ssh *ssh, Authctxt *authctxt)
 	 * Cleanup ptys/utmp only if privsep is disabled,
 	 * or if running in monitor.
 	 */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     if (!use_privsep || mm_is_monitor())
 #endif
 		session_destroy_all(ssh, session_pty_cleanup2);

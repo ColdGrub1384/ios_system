@@ -74,7 +74,11 @@ start_helper(int *fdp, pid_t *pidp, void (**osigchldp)(int))
 		return SSH_ERR_SYSTEM_ERROR;
 	}
 	osigchld = ssh_signal(SIGCHLD, SIG_DFL);
-	if ((pid = fork()) == -1) {
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+	if ((pid = ios_fork()) == -1) {
+#else
+    if ((pid = fork()) == -1) {
+#endif
 		oerrno = errno;
 		error("fork: %s", strerror(errno));
 		close(pair[0]);
@@ -91,12 +95,15 @@ start_helper(int *fdp, pid_t *pidp, void (**osigchldp)(int))
 		}
 		close(pair[0]);
 		close(pair[1]);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		closefrom(STDERR_FILENO + 1);
 #endif
 		debug_f("starting %s %s", helper,
 		    verbosity == NULL ? "" : verbosity);
+#if TARGET_OS_WATCH || TARGET_OS_TV
+#else
 		execlp(helper, helper, verbosity, (char *)NULL);
+#endif
 		error_f("execlp: %s", strerror(errno));
 		_exit(1);
 	}

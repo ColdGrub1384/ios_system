@@ -224,7 +224,7 @@ allowed_user(struct ssh *ssh, struct passwd * pw)
 			return 0;
 		}
 	}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (options.num_deny_groups > 0 || options.num_allow_groups > 0) {
 		/* Get the user's group access list (primary and supplementary) */
 		if (ga_init(pw->pw_name, pw->pw_gid) == 0) {
@@ -319,7 +319,7 @@ auth_log(struct ssh *ssh, int authenticated, int partial,
 	const char *authmsg;
 	char *extra = NULL;
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if (use_privsep && !mm_is_monitor() && !authctxt->postponed)
 		return;
 #endif

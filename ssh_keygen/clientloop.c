@@ -122,7 +122,7 @@ extern __thread int stdin_null_flag;
 extern __thread int no_shell_flag;
 
 /* Flag indicating that ssh should daemonise after authentication is complete */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 extern int fork_after_authentication_flag;
 #endif
 
@@ -1078,8 +1078,12 @@ process_escapes(struct ssh *ssh, Channel *c,
 				    "[backgrounded]\n", efc->escape_char)) != 0)
 					fatal_fr(r, "sshbuf_putf");
 
-				/* Fork into background. */
-				pid = fork();
+                /* Fork into background. */
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+				pid = ios_fork();
+#else
+                pid = fork();
+#endif
 				if (pid == -1) {
 					error("fork: %.100s", strerror(errno));
 					continue;
@@ -1247,7 +1251,7 @@ client_loop(struct ssh *ssh, int have_pty, int escape_char_arg,
 			fatal_f("pledge(): %s", strerror(errno));
 
 	} else if (!option_clear_or_none(options.proxy_command) ||
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	    fork_after_authentication_flag) {
 #else
         0) {
@@ -1562,7 +1566,7 @@ client_request_x11(struct ssh *ssh, const char *request_type, int rchan)
 	u_int originator_port;
 	int r, sock;
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     verbose("Warning: ssh server tried X11 forwarding. This is not available at the moment.");
     return NULL;
 #else
@@ -2481,7 +2485,7 @@ client_session2_setup(struct ssh *ssh, int id, int want_tty, int want_subsystem,
 		/* Store window size in the packet. */
         if (ioctl(in_fd, TIOCGWINSZ, &ws) == -1) {
 			memset(&ws, 0, sizeof(ws));
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
             // Since we don't get window size from ioctl, we set it ourselves:
             ws.ws_col = atoi(getenv("COLUMNS"));
             ws.ws_row = atoi(getenv("LINES"));
@@ -2611,7 +2615,7 @@ client_stop_mux(void)
 	 */
 	if (options.control_persist || no_shell_flag) {
 		session_closed = 1;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         setproctitle("[stopped mux]");
 #endif
 	}

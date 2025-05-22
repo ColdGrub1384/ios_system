@@ -44,7 +44,7 @@
 #include "monitor_wrap.h"
 #include "misc.h"
 #include "servconf.h"
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #undef PRIVSEP
 #define PRIVSEP(x)    (x)
 #endif

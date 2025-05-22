@@ -59,7 +59,7 @@ __FBSDID("$FreeBSD: src/bin/ls/util.c,v 1.38 2005/06/03 11:05:58 dd Exp $");
 int
 prn_normal(const char *s)
 {
-#ifdef TARGET_OS_IPHONE
+#if defined(TARGET_OS_IPHONE) || defined(TARGET_OS_WATCH) || defined(TARGET_OS_TV)
     // This is a bit extreme, but we need to keep the chars together for
     // the rest of the pipeline
     fprintf(thread_stdout, "%s", s);
@@ -102,7 +102,7 @@ prn_printable(const char *s)
 	int i, n;
 	size_t clen;
 
-#ifdef TARGET_OS_IPHONE
+#if defined(TARGET_OS_IPHONE) || defined(TARGET_OS_WATCH) || defined(TARGET_OS_TV) || defined(TARGET_OS_MACCATALYST)
     fprintf(thread_stdout, "%s", s);
     return strlen(s);
 #else

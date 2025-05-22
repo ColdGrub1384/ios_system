@@ -121,7 +121,7 @@
 #include "headers.h"
 
 #include <TargetConditionals.h>
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 // from ios_error.h, but without the compileError:
 // Thread-local input and output streams
 extern __thread FILE* thread_stdin;

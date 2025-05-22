@@ -984,7 +984,7 @@ colorquit(int sig)
 {
 	endcolor(sig);
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	(void)signal(sig, SIG_DFL);
     // back to default behaviour on both signals:
     (void)signal(SIGINT, SIG_DFL);

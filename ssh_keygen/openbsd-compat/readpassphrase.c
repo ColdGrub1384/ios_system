@@ -35,7 +35,7 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #include "log.h"
 #endif
 
@@ -79,7 +79,7 @@ restart:
 	 * Read and write to /dev/tty if available.  If not, read from
 	 * stdin and write to stderr unless a tty is required.
 	 */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	if ((flags & RPP_STDIN) ||
 	    (input = output = open(_PATH_TTY, O_RDWR)) == -1) {
 		if (flags & RPP_REQUIRE_TTY) {
@@ -143,7 +143,7 @@ restart:
 
 	while ((nr = read(input, &ch, 1)) == 1 && ch != '\n' && ch != '\r') {
 		if (p < end) {
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
             if (flags & RPP_ECHO_ON) {
                 fputc(ch, thread_stderr);
                 fflush(thread_stderr);
@@ -187,7 +187,7 @@ restart:
 	}
 	*p = '\0';
 	save_errno = errno;
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     // Put a carriage return both with and without echo on
     fputc('\n', thread_stderr);
     fflush(thread_stderr);
@@ -214,7 +214,7 @@ restart:
 	(void)sigaction(SIGTSTP, &savetstp, NULL);
 	(void)sigaction(SIGTTIN, &savettin, NULL);
 	(void)sigaction(SIGTTOU, &savettou, NULL);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     if (input != STDIN_FILENO)
 		(void)close(input);
 #else
