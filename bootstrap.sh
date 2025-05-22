@@ -236,6 +236,7 @@ MAKE_FAT_FRAMEWORK "curl_ios"   "appletvsimulator" "arm64 x86_64"
 
 xcodebuild -create-xcframework \
     -framework "build_iphoneos.arm64/ios_system.framework" \
+    -framework "build_iphonesimulator/ios_system.framework" \
     -framework "build_maccatalyst/ios_system.framework" \
     -framework "build_watchos/ios_system.framework" \
     -framework "build_watchsimulator/ios_system.framework" \
@@ -245,6 +246,7 @@ xcodebuild -create-xcframework \
 
 xcodebuild -create-xcframework \
     -framework "build_iphoneos.arm64/shell.framework" \
+    -framework "build_iphonesimulator/shell.framework" \
     -framework "build_maccatalyst/shell.framework" \
     -framework "build_watchos/shell.framework" \
     -framework "build_watchsimulator/shell.framework" \
@@ -254,6 +256,7 @@ xcodebuild -create-xcframework \
 
 xcodebuild -create-xcframework \
     -framework "build_iphoneos.arm64/tar.framework" \
+    -framework "build_iphonesimulator/tar.framework" \
     -framework "build_maccatalyst/tar.framework" \
     -framework "build_watchos/tar.framework" \
     -framework "build_watchsimulator/tar.framework" \
@@ -263,6 +266,7 @@ xcodebuild -create-xcframework \
 
 xcodebuild -create-xcframework \
     -framework "build_iphoneos.arm64/text.framework" \
+    -framework "build_iphonesimulator/text.framework" \
     -framework "build_maccatalyst/text.framework" \
     -framework "build_watchos/text.framework" \
     -framework "build_watchsimulator/text.framework" \
@@ -272,6 +276,7 @@ xcodebuild -create-xcframework \
 
 xcodebuild -create-xcframework \
     -framework "build_iphoneos.arm64/files.framework" \
+    -framework "build_iphonesimulator/files.framework" \
     -framework "build_maccatalyst/files.framework" \
     -framework "build_watchos/files.framework" \
     -framework "build_watchsimulator/files.framework" \
@@ -281,6 +286,7 @@ xcodebuild -create-xcframework \
 
 xcodebuild -create-xcframework \
     -framework "build_iphoneos.arm64/awk.framework" \
+    -framework "build_iphonesimulator/awk.framework" \
     -framework "build_maccatalyst/awk.framework" \
     -framework "build_watchos/awk.framework" \
     -framework "build_watchsimulator/awk.framework" \
@@ -290,6 +296,7 @@ xcodebuild -create-xcframework \
 
 xcodebuild -create-xcframework \
     -framework "build_iphoneos.arm64/curl_ios.framework" \
+    -framework "build_iphonesimulator/curl_ios.framework" \
     -framework "build_maccatalyst/curl_ios.framework" \
     -framework "build_watchos/curl_ios.framework" \
     -framework "build_watchsimulator/curl_ios.framework" \
