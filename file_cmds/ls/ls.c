@@ -465,7 +465,7 @@ ls_main(int argc, char *argv[])
 		 * column number will be incremented incorrectly
 		 * for "stty oxtabs" mode.
 		 */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		f_notabs = 1;
 		(void)signal(SIGINT, colorquit);
 		(void)signal(SIGQUIT, colorquit);
@@ -554,7 +554,7 @@ ls_main(int argc, char *argv[])
 	else
 		traverse(1, dotav, fts_options);
     // reset signal:
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     (void)signal(SIGINT, SIG_DFL);
     (void)signal(SIGQUIT, SIG_DFL);
 #endif

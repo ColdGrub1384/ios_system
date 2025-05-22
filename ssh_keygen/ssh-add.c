@@ -70,7 +70,7 @@
 #include "sk-api.h"
 // iOS additions:
 #include "ios_error.h"
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #define __progname ssh_progname
 #endif
 
@@ -842,7 +842,7 @@ ssh_add_main(int argc, char **argv)
 			ret = 1;
 			goto done;
 		}
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     if (getenv("HOME"))
         pw->pw_dir = getenv("HOME");
 #endif

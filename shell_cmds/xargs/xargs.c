@@ -66,7 +66,7 @@ __FBSDID("$FreeBSD: src/usr.bin/xargs/xargs.c,v 1.57 2005/02/27 02:01:31 gad Exp
 #include <unistd.h>
 
 #include <TargetConditionals.h>
-#ifdef TARGET_OS_IPHONE
+#if defined(TARGET_OS_IPHONE) || defined(TARGET_OS_WATCH) || defined(TARGET_OS_TV) || defined(TARGET_OS_MACCATALYST)
 #include "ios_error.h"
 #undef stderr
 #define stderr thread_stderr
@@ -113,7 +113,7 @@ xargs_main(int argc, char *argv[])
 	char *endptr;
 
 	inpline = replstr = NULL;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	ep = environ;
 #else
     ep = environmentVariables(ios_currentPid());
@@ -622,13 +622,13 @@ run(char **argv)
 	}
 exec:
 	childerr = 0;
-	switch(pid = vfork()) {
+	switch(pid = ios_fork()) {
 	case -1:
 		err(1, "vfork");
     default:   // ios_system: go through both branches
 	// case 0:
 		if (oflag) {
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 			if ((fd = open(_PATH_TTY, O_RDONLY)) == -1)
 #else
             if ((fd = ios_getstdin()) == -1) 
@@ -640,11 +640,11 @@ exec:
 		if (fd > STDIN_FILENO) {
 			if (dup2(fd, STDIN_FILENO) != 0)
 				err(1, "can't dup2 to stdin");
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
             close(fd);
 #endif
 		}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		execvp(argv[0], argv);
 		childerr = errno;
 		// _exit(1);
@@ -654,7 +654,7 @@ exec:
 	}
 	curprocs++;
     // Now, we need to wait until the child process has finished. 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	waitchildren(*argv, 0);
 #else
     // iOS specifics: wait for each process in turn.
@@ -680,7 +680,7 @@ waitchildren(const char *name, int waitall)
 	pid_t pid;
 	int status;
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     return;
 #endif
 	while ((pid = waitpid(-1, &status, !waitall && curprocs < maxprocs ?
@@ -700,7 +700,7 @@ waitchildren(const char *name, int waitall)
 		if (WEXITSTATUS(status))
 			rval = 1;
 	}
-#ifndef TARGET_OS_IPHONE
+#if !defined(TARGET_OS_IPHONE) && !defined(TARGET_OS_WATCH) && !defined(TARGET_OS_TV) && !defined(TARGET_OS_MACCATALYST)
 	if (pid == -1 && errno != ECHILD)
 		err(1, "wait3");
 #endif

@@ -78,7 +78,7 @@ printenv_main(int argc, char *argv[])
 	argv += optind;
 
 	if (argc == 0) {
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         for (ep = environ; *ep != NULL; ep++)
 #else
         for (ep = environmentVariables(ios_currentPid()); *ep != NULL; ep++)
@@ -87,7 +87,7 @@ printenv_main(int argc, char *argv[])
 		exit(0);
 	}
 	len = strlen(*argv);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     for (ep = environ; *ep != NULL; ep++)
 #else
     for (ep = environmentVariables(ios_currentPid()); *ep != NULL; ep++)

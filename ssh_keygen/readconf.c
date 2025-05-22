@@ -535,15 +535,22 @@ execute_in_shell(const char *cmd)
 	debug("Executing command: '%.500s'", cmd);
 
 	/* Fork and execute the command. */
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     // iOS: first execute the command, then get back:
+    pid = ios_fork();
+#else
     pid = fork();
+#endif
     char *argv[2];
     argv[0] = xstrdup(cmd);
     argv[1] = NULL;
     execv(argv[0], argv);
+
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+	if ((pid = ios_fork()) == 0) {
 #else
-	if ((pid = fork()) == 0) {
+    if ((pid = fork()) == 0) {
+#endif
 		char *argv[4];
 
 		if (stdfd_devnull(1, 1, 0) == -1)
@@ -562,7 +569,7 @@ execute_in_shell(const char *cmd)
 		kill(getpid(), SIGTERM);
 		_exit(1);
 	}
-#endif
+
 	/* Parent. */
 	if (pid == -1)
 		fatal_f("fork: %.100s", strerror(errno));

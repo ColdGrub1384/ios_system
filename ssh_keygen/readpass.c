@@ -52,7 +52,7 @@ read_passphrase(const char *prompt, int flags)
     const char *askpass_hint = NULL;
     const char *s;
 
-#if !TARGET_OS_IPHONE // askpass is not going to work here.
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST // askpass is not going to work here.
     if ((s = getenv("DISPLAY")) != NULL)
         allow_askpass = *s != '\0';
     if ((s = getenv(SSH_ASKPASS_REQUIRE_ENV)) != NULL) {
@@ -67,7 +67,7 @@ read_passphrase(const char *prompt, int flags)
 #endif
     
     rppflags = (flags & RP_ECHO) ? RPP_ECHO_ON : RPP_ECHO_OFF;
-#if !TARGET_OS_IPHONE // askpass is not going to work here.
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST // askpass is not going to work here.
     if (use_askpass)
         debug_f("requested to askpass");
     else if (flags & RP_USE_ASKPASS)
@@ -135,7 +135,7 @@ ask_permission(const char *fmt, ...)
     vsnprintf(prompt, sizeof(prompt), fmt, args);
     va_end(args);
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     p = read_passphrase(prompt, RP_USE_ASKPASS|RP_ALLOW_EOF|RP_ASK_PERMISSION);
 #else
     p = read_passphrase(prompt, RP_ECHO);
@@ -188,7 +188,7 @@ notify_start(int force_askpass, const char *fmt, ...)
 		writemsg(prompt);
 		goto out_ctx;
 	}
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 	writemsg(prompt);
     fflush(thread_stderr);
 #else
@@ -257,7 +257,7 @@ notify_complete(struct notifier_ctx *ctx, const char *fmt, ...)
 		free(ctx);
 		return;
 	}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	kill(ctx->pid, SIGTERM);
 	while ((ret = waitpid(ctx->pid, NULL, 0)) == -1) {
 		if (errno != EINTR)

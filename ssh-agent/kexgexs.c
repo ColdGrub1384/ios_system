@@ -99,7 +99,7 @@ input_kex_dh_gex_request(int type, u_int32_t seq, struct ssh *ssh)
 	}
 
 	/* Contact privileged parent */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	kex->dh = PRIVSEP(choose_dh(min, nbits, max));
 #endif
 	if (kex->dh == NULL) {

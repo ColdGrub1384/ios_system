@@ -1999,7 +1999,11 @@ ssh_keysign(struct ssh *ssh, struct sshkey *key, u_char **sigp, size_t *lenp,
 		error_f("pipe: %s", strerror(errno));
 		return -1;
 	}
-	if ((pid = fork()) == -1) {
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+	if ((pid = ios_fork()) == -1) {
+#else
+    if ((pid = fork()) == -1) {
+#endif
 		error_f("fork: %s", strerror(errno));
 		return -1;
 	}
@@ -2018,12 +2022,14 @@ ssh_keysign(struct ssh *ssh, struct sshkey *key, u_char **sigp, size_t *lenp,
 			fatal_f("dup2: %s", strerror(errno));
 		sock = STDERR_FILENO + 1;
 		fcntl(sock, F_SETFD, 0);	/* keep the socket on exec */
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         closefrom(sock + 1);
 #endif
 		debug3_f("[child] pid=%ld, exec %s",
 		    (long)getpid(), _PATH_SSH_KEY_SIGN);
-		execl(_PATH_SSH_KEY_SIGN, _PATH_SSH_KEY_SIGN, (char *)NULL);
+#if !TARGET_OS_WATCH && !TARGET_OS_TV
+        execl(_PATH_SSH_KEY_SIGN, _PATH_SSH_KEY_SIGN, (char *)NULL);
+#endif
 		fatal_f("exec(%s): %s", _PATH_SSH_KEY_SIGN,
 		    strerror(errno));
 	}

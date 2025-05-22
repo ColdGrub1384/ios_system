@@ -97,7 +97,7 @@
 extern void makeGlobal(void);
 extern void makeLocal(void);
 static void* runSocketInBackground(void* parameters);
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #define __progname ssh_progname
 #endif
 
@@ -154,7 +154,7 @@ time_t parent_alive_interval = 0;
 
 /* pid of process for which cleanup_socket is applicable */
 pid_t cleanup_pid = 0;
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 volatile pthread_t cleanup_tid = NULL;
 #endif
 
@@ -1334,7 +1334,7 @@ cleanup_socket(void)
 		unlink(socket_name);
 	if (socket_dir[0])
 		rmdir(socket_dir);
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     makeGlobal();
     unsetenv(SSH_AUTHSOCKET_ENV_NAME);
     makeLocal();
@@ -1356,7 +1356,7 @@ cleanup_handler(int sig)
 #ifdef ENABLE_PKCS11
 	pkcs11_terminate();
 #endif
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     cleanup_tid = NULL;
 #endif
 	_exit(2);
@@ -1388,7 +1388,7 @@ usage(void)
 	exit(1);
 }
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 static __thread struct rlimit rlim;
 static int sock;
 static __thread int result;
@@ -1404,7 +1404,7 @@ static u_int maxfds = 0;
 int
 main(int ac, char **av)
 {
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     int c_flag = 0, d_flag = 0, D_flag = 0, k_flag = 0, s_flag = 0;
     int sock, ch, result, saved_errno;
 #else
@@ -1412,7 +1412,7 @@ main(int ac, char **av)
     int ch;
 #endif
     char *shell, *format, *pidstr, *agentsocket = NULL;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 #ifdef HAVE_SETRLIMIT
     struct rlimit rlim;
 #endif
@@ -1423,7 +1423,7 @@ main(int ac, char **av)
     char pidstrbuf[1 + 3 * sizeof pid];
     size_t len;
     mode_t prev_mask;
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     int timeout = -1; /* INFTIM */
     struct pollfd *pfd = NULL;
     size_t npfd = 0;
@@ -1519,7 +1519,7 @@ main(int ac, char **av)
     if (k_flag) {
         const char *errstr = NULL;
         
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         pidstr = getenv(SSH_AGENTPID_ENV_NAME);
         if (pidstr == NULL) {
             fprintf(stderr, "%s not set, cannot kill agent\n",
@@ -1571,7 +1571,7 @@ main(int ac, char **av)
     if (agentsocket == NULL) {
         // iOS: need to remove socket_dir here, because limit is at 104 chars
         // TODO: prevent users from relaunching ssh-agent if socket already active.
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         /* Create private directory for agent socket */
         mktemp_proto(socket_dir, sizeof(socket_dir));
         if (mkdtemp(socket_dir) == NULL) {
@@ -1618,7 +1618,7 @@ main(int ac, char **av)
         fflush(stdout);
         goto skip; // run the program without forking
     }
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     pid = fork();
     if (pid == -1) {
         perror("fork");
@@ -1671,7 +1671,7 @@ static void* runSocketInBackground(void* parameters) {
     /* child */
     log_init(__progname, SYSLOG_LEVEL_INFO, SYSLOG_FACILITY_AUTH, 0);
     
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     if (setsid() == -1) {
         error("setsid: %s", strerror(errno));
         cleanup_exit(1);
@@ -1699,7 +1699,7 @@ skip:
     pkcs11_init(0);
 #endif
     new_socket(AUTH_SOCKET, sock);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     if (ac > 0)
         parent_alive_interval = 10;
 #endif
@@ -1708,7 +1708,7 @@ skip:
     ssh_signal(SIGINT, (d_flag | D_flag) ? cleanup_handler : SIG_IGN);
     ssh_signal(SIGHUP, cleanup_handler);
     ssh_signal(SIGTERM, cleanup_handler);
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     pthread_cleanup_push((void (*)(void *))cleanup_handler, NULL);
 #endif
     

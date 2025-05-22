@@ -57,7 +57,7 @@
 #include "strdup.h"
 #include "strcase.h"
 #include <TargetConditionals.h>
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #include "ios_error.h"
 #undef STDIN_FILENO
 #define STDIN_FILENO fileno(thread_stdin)
@@ -207,7 +207,11 @@ static CURLcode ntlm_wb_init(struct Curl_easy *data, struct ntlmdata *ntlm,
     goto done;
   }
 
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
+  child_pid = ios_fork();
+#else
   child_pid = fork();
+#endif
   if(child_pid == -1) {
     sclose(sockfds[0]);
     sclose(sockfds[1]);
@@ -234,6 +238,7 @@ static CURLcode ntlm_wb_init(struct Curl_easy *data, struct ntlmdata *ntlm,
       exit(1);
     }
 
+#if !TARGET_OS_WATCH && !TARGET_OS_TV
     if(domain)
       execl(ntlm_auth, ntlm_auth,
             "--helper-protocol", "ntlmssp-client-1",
@@ -247,6 +252,7 @@ static CURLcode ntlm_wb_init(struct Curl_easy *data, struct ntlmdata *ntlm,
             "--use-cached-creds",
             "--username", username,
             NULL);
+#endif
 
     sclose_nolog(sockfds[1]);
     failf(data, "Could not execl(). errno %d: %s",

@@ -70,7 +70,7 @@
 #include "channels.h" /* XXX for session.h */
 #include "session.h" /* XXX for child_set_env(); refactor? */
 #include "sk-api.h"
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #undef PRIVSEP
 #define PRIVSEP(x)    (x)
 #endif

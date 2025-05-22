@@ -37,7 +37,7 @@
 #include "tool_formparse.h"
 
 #include <TargetConditionals.h>
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #include "ios_error.h"
 #undef stdin
 #define stdin thread_stdin

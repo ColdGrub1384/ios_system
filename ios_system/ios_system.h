@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR || TARGET_OS_MACCATALYST
+#import <TargetConditionals.h>
+#if TARGET_OS_IPHONE || TARGET_OS_MACCATALYST
 #import <UIKit/UIKit.h>
 #endif
 

@@ -4438,7 +4438,7 @@ channel_send_window_changes(struct ssh *ssh)
 		    sc->channels[i]->type != SSH_CHANNEL_OPEN)
 			continue;
 		if (ioctl(sc->channels[i]->rfd, TIOCGWINSZ, &ws) == -1)
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 			continue;
 #else
         {  // Since we don't get window size from ioctl, we set it ourselves:

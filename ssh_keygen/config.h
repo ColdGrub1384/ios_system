@@ -1,6 +1,8 @@
 /* config.h.  Generated from config.h.in by configure.  */
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+#import <TargetConditionals.h>
+
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
@@ -168,7 +170,9 @@
 /* #undef GLOB_HAS_GL_STATV */
 
 /* Define this if you want GSSAPI support in the version 2 protocol */
+#if !TARGET_OS_WATCH
 #define GSSAPI 1
+#endif
 
 /* Define if you want to use shadow password expire field */
 /* #undef HAS_SHADOW_EXPIRE */

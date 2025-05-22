@@ -59,7 +59,7 @@ __thread int	 env_verbosity;
 
 static void usage(void);
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 extern void clearEnvironment(pid_t pid);
 #endif
 
@@ -109,7 +109,7 @@ env_main(int argc, char **argv)
 			usage();
 		}
 	if (want_clear) {
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
         clearEnvironment(ios_currentPid());
 #else
 		environ = cleanenv;
@@ -139,7 +139,7 @@ env_main(int argc, char **argv)
 			if (env_verbosity > 1)
 				sleep(1);
 		}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         execvp(*argv, argv);
         err(errno == ENOENT ? 127 : 126, "%s", *argv);
 #else
@@ -150,7 +150,7 @@ env_main(int argc, char **argv)
         ios_exit(childerr);
 #endif
 	}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
         for (ep = environ; *ep != NULL; ep++)
 #else
         for (ep = environmentVariables(ios_currentPid()); *ep != NULL; ep++)

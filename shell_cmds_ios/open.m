@@ -9,7 +9,7 @@
 #include "ios_system/ios_system.h"
 #include "ios_error.h"
 
-#if (defined(TARGET_OS_IPHONE) || defined(TARGET_OS_SIMULATOR) || defined(TARGET_OS_MACCATALYST)) && !defined(TARGET_OS_WATCH)
+#if (defined(TARGET_OS_IPHONE) || defined(TARGET_OS_MACCATALYST)) && !defined(TARGET_OS_WATCH)
 #import <UIKit/UIKit.h>
 
 

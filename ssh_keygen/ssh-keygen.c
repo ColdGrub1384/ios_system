@@ -88,7 +88,7 @@
 #define DEFAULT_BITS_DSA	1024
 #define DEFAULT_BITS_ECDSA	256
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 // We need to reinitialize all local variables at each restart.
 // This seems to have the smallest impact on source code
 #define static static __thread
@@ -184,7 +184,7 @@ int prime_test(FILE *, FILE *, u_int32_t, u_int32_t, char *, unsigned long,
     unsigned long);
 #endif
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 // #define static as "static __thread" only works on variables, so we reset here:
 #undef static
 #endif
@@ -251,7 +251,7 @@ type_bits_valid(int type, const char *name, u_int32_t *bitsp)
 static int
 confirm_overwrite(const char *filename)
 {
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     char yesno[3];
 #else
     char* yesno;
@@ -261,7 +261,7 @@ confirm_overwrite(const char *filename)
 	if (stat(filename, &st) != 0)
 		return 1;
 	fprintf(thread_stdout, "%s already exists.\n", filename);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	fprintf(thread_stdout, "Overwrite (y/n)? ");
 	fflush(stdout);
 	if (fgets(yesno, sizeof(yesno), stdin) == NULL)
@@ -287,7 +287,7 @@ confirm_overwrite(const char *filename)
 static void
 ask_filename(struct passwd *pw, const char *prompt)
 {
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	char buf[1024];
 #else
     char *buf;
@@ -334,7 +334,7 @@ ask_filename(struct passwd *pw, const char *prompt)
 	}
     snprintf(identity_file, sizeof(identity_file),
         "%s/%s", pw->pw_dir, name);
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	fprintf(thread_stdout, "%s (%s): ", prompt, identity_file);
 	fflush(stdout);
 	if (fgets(buf, sizeof(buf), stdin) == NULL)
@@ -349,7 +349,7 @@ ask_filename(struct passwd *pw, const char *prompt)
 	buf[strcspn(buf, "\n")] = '\0';
 	if (strcmp(buf, "") != 0)
 		strlcpy(identity_file, buf, sizeof(identity_file));
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     free(buf);
 #endif
 	have_identity = 1;
@@ -3198,7 +3198,7 @@ sshkeygen_main(int argc, char **argv)
 	pw = getpwuid(getuid());
 	if (!pw)
 		fatal("No user exists for uid %lu", (u_long)getuid());
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
     if (getenv("HOME"))
         pw->pw_dir = getenv("HOME");
 #endif

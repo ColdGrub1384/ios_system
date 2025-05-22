@@ -71,7 +71,7 @@
 #include "myproposal.h"
 #include "digest.h"
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #define SSHDIR                "/etc/ssh"
 #define _PATH_SERVER_CONFIG_FILE    SSHDIR "/sshd_config"
 #define _PATH_HOST_CONFIG_FILE        SSHDIR "/ssh_config"
@@ -1018,7 +1018,7 @@ match_cfg_line_group(const char *grps, int line, const char *user)
 		debug("Can't match group at line %d because user %.100s does "
 		    "not exist", line, user);
 	}
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
     else if (ga_init(pw->pw_name, pw->pw_gid) == 0) {
 		debug("Can't Match group because user %.100s not in any group "
 		    "at line %d", user, line);
@@ -1032,7 +1032,7 @@ match_cfg_line_group(const char *grps, int line, const char *user)
 	}
 #endif
 out:
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 	ga_free();
 #endif
 	return result;

@@ -57,12 +57,16 @@ __FBSDID("$FreeBSD$");
 
 // stty is mostly useless inside a-Shell. But we keep it because other commands might need it.
 #include <TargetConditionals.h>
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #include "ios_error.h"
 #endif
 
+extern __thread FILE* thread_stdin;
+extern __thread FILE* thread_stdout;
+extern __thread FILE* thread_stderr;
+
 int
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 stty_main(int argc, char *argv[])
 #else
 main(int argc, char *argv[])
@@ -104,7 +108,7 @@ main(int argc, char *argv[])
 args:	argc -= optind;
 	argv += optind;
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST && !TARGET_OS_MACCATALYST
 	if (tcgetattr(i.fd, &i.t) < 0)
         errx(1, "%s isn't a terminal", file);
     if (ioctl(i.fd, TIOCGETD, &i.ldisc) < 0)
@@ -167,7 +171,7 @@ args:	argc -= optind;
 		stty_usage();
 	}
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST && !TARGET_OS_MACCATALYST
     if (i.set && tcsetattr(i.fd, 0, &i.t) < 0)
 		err(1, "tcsetattr");
 	if (i.wset && ioctl(i.fd, TIOCSWINSZ, &i.win) < 0)

@@ -46,7 +46,7 @@ __FBSDID("$FreeBSD$");
 
 
 #include <TargetConditionals.h>
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 #ifdef __APPLE__
 #include <sys/ioctl_compat.h>	/* XXX NTTYDISC is too well hidden */
 #endif
@@ -73,7 +73,7 @@ print(struct termios *tp, struct winsize *wp, int ldisc, enum FMT fmt)
 	/* Line discipline. */
 	if (ldisc != TTYDISC) {
 		switch(ldisc) {
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 #ifdef __APPLE__
 		case NTTYDISC:
 			cnt += printf("new tty disc; ");

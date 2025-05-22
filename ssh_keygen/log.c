@@ -35,7 +35,7 @@
  */
 
 #include "includes.h"
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
 #undef STDERR_FILENO
 #define STDERR_FILENO 2
 #endif
@@ -214,7 +214,7 @@ log_init(const char *av0, LogLevel level, SyslogFacility facility,
 	log_handler_ctx = NULL;
 
 	log_on_stderr = on_stderr;
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_WATCH || TARGET_OS_TV || TARGET_OS_MACCATALYST
         log_stderr_fd = fileno(thread_stderr);
 #endif
 
@@ -420,7 +420,7 @@ do_log(const char *file, const char *func, int line, LogLevel level,
 		syslog_r(pri, &sdata, "%.500s", fmtbuf);
 		closelog_r(&sdata);
 #else
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && !TARGET_OS_WATCH && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
 		openlog(argv0 ? argv0 : ssh_progname, LOG_PID, log_facility);
 		syslog(pri, "%.500s", fmtbuf);
 		closelog();
