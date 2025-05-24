@@ -5,13 +5,14 @@ let remotePackageSite = "https://gatites.no.binarios.cl/git/api/packages/pyto/ge
 
 // -- begin checksums --
 let checksums = [
-  "apple-universal-awk.xcframework.zip": "0386d314f18206378956f102f6b55cab8db68959e5232ddd752528ac87b8cbca",
-  "apple-universal-curl_ios.xcframework.zip": "73bdffc7d56bb175010f135b235eab8e10a80d6c75cd5637e74ba43703a56778",
-  "apple-universal-files.xcframework.zip": "e375292c0bccfbc87ee76d2ed8b284b38aece68a2b91ce8eec83d39508b7ea44",
-  "apple-universal-ios_system.xcframework.zip": "4815e66a062c490985c1755848205015d99ec6c85c95e33cf6d23627403c0f10",
-  "apple-universal-shell.xcframework.zip": "a54eea6631f9c98f959dd3b585ebc5fe0936631b85c5b6341e9bef3b0ee2c278",
-  "apple-universal-tar.xcframework.zip": "217a0afe9bfae7c06bae8b81a4ad06dc69820bef7a2e80a63b684c806e7555b1",
-  "apple-universal-text.xcframework.zip": "09b1cae69372d1cc3ebded7e82985a657b3b1889b9e0d597e35d1e52801d1c70",
+  "apple-universal-awk.xcframework.zip": "1511f081132ad7990802449ee9fe354c8b0b7936d4e03bd27e1476fc9d478dbd",
+  "apple-universal-curl_ios.xcframework.zip": "d828ba2509e69be382635144af0e134ef0d70c276d0d92b8473398fec4f66591",
+  "apple-universal-files.xcframework.zip": "2f748037ccdfa3839c185ef832059551bbe061ebfffb58f2a47ded807193b7af",
+  "apple-universal-ios_system.xcframework.zip": "3f14a39f20dc186a0070c5675f666f9efeedfc6a82329737fdcc78651846fbed",
+  "apple-universal-network_ios.xcframework.zip": "97dd98f4434135349f3d22562aec5f081f29556a93dc1a88f684b2909ec4ec29",
+  "apple-universal-shell.xcframework.zip": "31aae801363056baeef6682692d3928360047aa87662e78aca7a71322d4c2cbc",
+  "apple-universal-tar.xcframework.zip": "7c84a4edef5aee0db63e40a61d04010f1510ca41c415391916f9d0cb2e34686c",
+  "apple-universal-text.xcframework.zip": "177eb39d81da0579b5f93467ba7caddf4866bc0dbf573e191145c5aad4610923",
 ]
 // -- end checksums --
 
@@ -52,6 +53,7 @@ let package = Package(
         "ios_system",
         "shell",
         "tar",
-        "text"
+        "text",
+        "network_ios"
     ].map({ binaryTarget(name: $0) })
 )
