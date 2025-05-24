@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$(dirname $0)"
+
 if [ -z "$LIBSSH2_XCFRAMEWORK_PATH" ] || [ -z "$OPENSSL_XCFRAMEWORK_PATH" ]; then
     echo "Set LIBSSH2_XCFRAMEWORK_PATH and OPENSSL_XCFRAMEWORK_PATH environment variables to compile ios_system"
     exit 1
@@ -7,6 +9,17 @@ fi
 
 cp -R "$LIBSSH2_XCFRAMEWORK_PATH" "ssh2.xcframework"
 cp -R "$OPENSSL_XCFRAMEWORK_PATH" "openssl.xcframework"
+
+token="$(cat registry_token.json | python -c "import json; import sys; print(json.loads(sys.stdin.read())['sha1'])")"
+
+upload_package() {
+    echo "Uploading $(basename $2)..."
+    curl --user "emmacold:$token" \
+     --upload-file "$2" \
+     "https://gatites.no.binarios.cl/git/api/packages/pyto/generic/$1/$3/$(basename $2)"
+}
+
+IOS_SYSTEM_VERSION="v3.0.0"
 
 BUILD() {
     if [[ "$2" = "maccatalyst" ]]; then
@@ -303,3 +316,55 @@ xcodebuild -create-xcframework \
     -framework "build_appletvos.arm64/curl_ios.framework" \
     -framework "build_appletvsimulator/curl_ios.framework" \
     -output    "curl_ios.xcframework"
+
+## Upload packages ##
+
+ZIP_FLAGS=('-x' '*.DS_Store' '-x' '__MACOSX')
+
+curl --user "emmacold:$token" -X DELETE \
+     "https://gatites.no.binarios.cl/git/api/packages/pyto/generic/ios_system/$IOS_SYSTEM_VERSION"
+
+rm -f "checksums.swift"
+echo "let checksums = [" >> "checksums.swift"
+for framework in *.xcframework; do
+    zip -R "apple-universal-$framework.zip" "$framework" ${ZIP_FLAGS[@]}
+    echo "  \"apple-universal-$framework.zip\": \"$(swift package compute-checksum apple-universal-$framework.zip)\"," >> "checksums.swift"
+    upload_package "ios_system" "apple-universal-$framework.zip" "$IOS_SYSTEM_VERSION"
+done
+echo "]" >> "checksums.swift"
+
+rm -f "NewPackages.swift"
+writting_checksums=0
+
+while IFS= read -r line; do
+    if [[ $line == *"// -- end checksums"* ]]; then
+        writting_checksums=0
+    fi
+
+    if [ $writting_checksums = 1 ]; then
+        continue
+    fi
+    
+    printf "%s\n" "$line" >> "NewPackages.swift"
+    
+    if [[ $line == *"// -- begin checksums"* ]]; then
+        writting_checksums=1
+        cat "checksums.swift" >> "NewPackages.swift"
+    fi
+done < "Package.swift"
+
+mv "Package.swift" "Package.old.swift"
+mv "NewPackages.swift" "Package.swift"
+
+mkdir -p "build/ios_system"
+pushd "build/ios_system"
+cp "../../Package.swift" "."
+swift package archive-source
+
+curl -X PUT --user "emmacold:$token" \
+	 -H "Accept: application/vnd.swift.registry.v1+json" \
+	 -F "source-archive=@ios_system.zip" \
+	 "https://gatites.no.binarios.cl/git/api/packages/pyto/swift/pyto-runtime/ios_system/$IOS_SYSTEM_VERSION"
+
+popd
+rm -rf "build/ios_system"
