@@ -317,9 +317,18 @@ xcodebuild -create-xcframework \
     -framework "build_appletvsimulator/curl_ios.framework" \
     -output    "curl_ios.xcframework"
 
-## Upload packages ##
+## Build network_ios ##
+
+pushd "network_ios"
+IOS_SYSTEM_XCFRAMEWORK_PATH="$PWD/../ios_system.xcframework" ./bootstrap.sh
+mv "network_ios.xcframework" ".."
+popd
+
+## Compress and upload packages ##
 
 ZIP_FLAGS=('-x' '*.DS_Store' '-x' '__MACOSX')
+
+rm *.xcframework.zip &> /dev/null
 
 curl --user "emmacold:$token" -X DELETE \
      "https://gatites.no.binarios.cl/git/api/packages/pyto/generic/ios_system/$IOS_SYSTEM_VERSION"
@@ -327,7 +336,7 @@ curl --user "emmacold:$token" -X DELETE \
 rm -f "checksums.swift"
 echo "let checksums = [" >> "checksums.swift"
 for framework in *.xcframework; do
-    zip -R "apple-universal-$framework.zip" "$framework" ${ZIP_FLAGS[@]}
+    zip -r "apple-universal-$framework.zip" "$framework" ${ZIP_FLAGS[@]}
     echo "  \"apple-universal-$framework.zip\": \"$(swift package compute-checksum apple-universal-$framework.zip)\"," >> "checksums.swift"
     upload_package "ios_system" "apple-universal-$framework.zip" "$IOS_SYSTEM_VERSION"
 done
