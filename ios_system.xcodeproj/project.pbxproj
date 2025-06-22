@@ -4464,10 +4464,7 @@
 					"-Wunused-const-variable",
 					"-Wincompatible-pointer-types-discards-qualifiers",
 				);
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Acube.ios-system";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -4511,10 +4508,7 @@
 					"-Wunused-const-variable",
 					"-Wincompatible-pointer-types-discards-qualifiers",
 				);
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Acube.ios-system";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -4564,10 +4558,7 @@
 					"-I",
 					ssh_keygen,
 				);
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.sshd";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4614,10 +4605,7 @@
 					"-I",
 					ssh_keygen,
 				);
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.sshd";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4874,10 +4862,7 @@
 					"-Wincompatible-pointer-types-discards-qualifiers",
 					"-DHAVE_CONFIG_H",
 				);
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.tar";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4919,10 +4904,7 @@
 					"-Wincompatible-pointer-types-discards-qualifiers",
 					"-DHAVE_CONFIG_H",
 				);
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.tar";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4958,10 +4940,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.files";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4996,10 +4975,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.files";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -5151,10 +5127,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.text";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -5189,10 +5162,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.text";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -5236,10 +5206,7 @@
 					"-I",
 					ios_system/,
 				);
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.awk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -5282,10 +5249,7 @@
 					"-I",
 					ios_system/,
 				);
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.awk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -5334,8 +5298,6 @@
 					ssh_keygen,
 				);
 				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
 					"-undefined",
 					dynamic_lookup,
 				);
@@ -5386,8 +5348,6 @@
 					ssh_keygen,
 				);
 				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-no_fixup_chains",
 					"-undefined",
 					dynamic_lookup,
 				);
@@ -5447,8 +5407,6 @@
 					"-ObjC",
 					"-F",
 					Frameworks,
-					"-Xlinker",
-					"-no_fixup_chains",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.curl";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -5505,8 +5463,6 @@
 					"-ObjC",
 					"-F",
 					Frameworks,
-					"-Xlinker",
-					"-no_fixup_chains",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nicolas-Holzschuch.curl";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
