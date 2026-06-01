@@ -28,6 +28,11 @@
 #include <libgen.h> // for basename()
 #include <dlfcn.h>  // for dlopen()/dlsym()/dlclose()
 #include <glob.h>   // for wildcard expansion
+
+#ifndef DEBUG
+    #define NSLog(...)
+#endif
+
 // Sideloading: when you compile yourself, as opposed to uploading on the app store
 // If true, all commands are enabled + debug messages if dylib not found.
 // If false, you get a smaller set, but compliance with AppStore rules.
