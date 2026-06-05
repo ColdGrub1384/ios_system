@@ -2210,10 +2210,6 @@ void ios_switchSession(const void* sessionId) {
         if (![currentSessionDir isEqualToString:[fileManager currentDirectoryPath]]) {
             [fileManager changeCurrentDirectoryPath:currentSessionDir];
         }
-        // Da fuck???? Yeah, that would hurt. Why is it there?
-        currentSession->stdin = stdin;
-        currentSession->stdout = stdout;
-        currentSession->stderr = stderr;
     }
 }
 
