@@ -869,6 +869,13 @@
 		22F6A25E20683F9B00E618F9 /* ios_system.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 223496AB1FD5FC71007ED1A9 /* ios_system.framework */; };
 		B503D1A42DDF1FB4003F8F56 /* ssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B503D1A22DDF1FB4003F8F56 /* ssh2.xcframework */; };
 		B503D1A52DDF1FB4003F8F56 /* openssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B503D1A32DDF1FB4003F8F56 /* openssl.xcframework */; };
+		B5A9933B3000915600A875B6 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = B5A9931A30008FBE00A875B6 /* test.c */; };
+		B5A9933C3000915600A875B6 /* options.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A9931930008FBE00A875B6 /* options.h */; };
+		B5A9933D3000915600A875B6 /* test.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A9931530008FBE00A875B6 /* test.h */; };
+		B5A9933E3000915600A875B6 /* bltin.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A9931630008FBE00A875B6 /* bltin.h */; };
+		B5A9933F3000915600A875B6 /* shell.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A9931830008FBE00A875B6 /* shell.h */; };
+		B5A993403000915600A875B6 /* mystring.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A9931730008FBE00A875B6 /* mystring.h */; };
+		B5A993433000922200A875B6 /* ios_system.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 223496AB1FD5FC71007ED1A9 /* ios_system.framework */; };
 		D285143225B1D7CD003405B4 /* sshkey.h in Headers */ = {isa = PBXBuildFile; fileRef = D285143125B1D7CD003405B4 /* sshkey.h */; };
 		D285144425B1DE19003405B4 /* cipher.h in Headers */ = {isa = PBXBuildFile; fileRef = D285144325B1DE19003405B4 /* cipher.h */; };
 		D285145625B1DE61003405B4 /* ssherr.h in Headers */ = {isa = PBXBuildFile; fileRef = D285145525B1DE61003405B4 /* ssherr.h */; };
@@ -877,6 +884,16 @@
 		D285149C25B200B9003405B4 /* openssl-compat.h in Headers */ = {isa = PBXBuildFile; fileRef = D285149B25B200B9003405B4 /* openssl-compat.h */; };
 		D28514A625B20351003405B4 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = D28514A525B20351003405B4 /* config.h */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B5A993413000920C00A875B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 223496A21FD5FC71007ED1A9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 223496AA1FD5FC71007ED1A9;
+			remoteInfo = ios_system;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		22122E2A21BC129000D8FE74 /* say.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = say.m; sourceTree = "<group>"; };
@@ -1510,6 +1527,13 @@
 		22F6A1B220683F4100E618F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../curl_ios/Info.plist; sourceTree = "<group>"; };
 		B503D1A22DDF1FB4003F8F56 /* ssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ssh2.xcframework; sourceTree = "<group>"; };
 		B503D1A32DDF1FB4003F8F56 /* openssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = openssl.xcframework; sourceTree = "<group>"; };
+		B5A9931530008FBE00A875B6 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		B5A9931630008FBE00A875B6 /* bltin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bltin.h; sourceTree = "<group>"; };
+		B5A9931730008FBE00A875B6 /* mystring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mystring.h; sourceTree = "<group>"; };
+		B5A9931830008FBE00A875B6 /* shell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shell.h; sourceTree = "<group>"; };
+		B5A9931930008FBE00A875B6 /* options.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = options.h; sourceTree = "<group>"; };
+		B5A9931A30008FBE00A875B6 /* test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
+		B5A993273000901500A875B6 /* test.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = test.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D212F98A25B066E9007F5D2D /* libssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libssh2.xcframework; path = xcfs/.build/artifacts/xcfs/libssh2/libssh2.xcframework; sourceTree = "<group>"; };
 		D212F99525B06810007F5D2D /* openssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = openssl.xcframework; path = xcfs/.build/artifacts/xcfs/openssl/openssl.xcframework; sourceTree = "<group>"; };
 		D285143125B1D7CD003405B4 /* sshkey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sshkey.h; path = ssh_keygen/sshkey.h; sourceTree = "<group>"; };
@@ -1631,6 +1655,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B5A993243000901500A875B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5A993433000922200A875B6 /* ios_system.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -1671,6 +1703,7 @@
 				22CF27661FDB3FDA0087DDAD /* ios_error.h */,
 				22B7530A2069801700F2B025 /* curl_ios.h */,
 				22B753042068DF8400F2B025 /* shell.h */,
+				B5A9931B30008FBE00A875B6 /* test */,
 				226378091FDB3EC700AE8827 /* file_cmds_ios */,
 				226378CA1FDB3F2B00AE8827 /* shell_cmds_ios */,
 				22CF27B01FDB42F50087DDAD /* text_cmds_grp */,
@@ -1710,6 +1743,7 @@
 				225479322B73814B005041FF /* ssh_cmdA.framework */,
 				224DF70E2B75712B00F13C58 /* ssh_agent.framework */,
 				223EF29B2B9623CA00A8ED5A /* sshd.framework */,
+				B5A993273000901500A875B6 /* test.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2875,6 +2909,19 @@
 			path = curl;
 			sourceTree = "<group>";
 		};
+		B5A9931B30008FBE00A875B6 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				B5A9931530008FBE00A875B6 /* test.h */,
+				B5A9931630008FBE00A875B6 /* bltin.h */,
+				B5A9931730008FBE00A875B6 /* mystring.h */,
+				B5A9931830008FBE00A875B6 /* shell.h */,
+				B5A9931930008FBE00A875B6 /* options.h */,
+				B5A9931A30008FBE00A875B6 /* test.c */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2994,6 +3041,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				22B7530B2069801700F2B025 /* curl_ios.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5A993223000901500A875B6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5A9933C3000915600A875B6 /* options.h in Headers */,
+				B5A9933D3000915600A875B6 /* test.h in Headers */,
+				B5A9933E3000915600A875B6 /* bltin.h in Headers */,
+				B5A9933F3000915600A875B6 /* shell.h in Headers */,
+				B5A993403000915600A875B6 /* mystring.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3211,12 +3270,34 @@
 			productReference = 22F6A1AF20683F4100E618F9 /* curl_ios.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		B5A993263000901500A875B6 /* test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5A9932B3000901600A875B6 /* Build configuration list for PBXNativeTarget "test" */;
+			buildPhases = (
+				B5A993223000901500A875B6 /* Headers */,
+				B5A993233000901500A875B6 /* Sources */,
+				B5A993243000901500A875B6 /* Frameworks */,
+				B5A993253000901500A875B6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B5A993423000920C00A875B6 /* PBXTargetDependency */,
+			);
+			name = test;
+			packageProductDependencies = (
+			);
+			productName = test;
+			productReference = B5A993273000901500A875B6 /* test.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		223496A21FD5FC71007ED1A9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Nicolas Holzschuch";
 				TargetAttributes = {
@@ -3257,6 +3338,9 @@
 						CreatedOnToolsVersion = 9.3;
 						ProvisioningStyle = Automatic;
 					};
+					B5A993263000901500A875B6 = {
+						CreatedOnToolsVersion = 26.4.1;
+					};
 				};
 			};
 			buildConfigurationList = 223496A51FD5FC71007ED1A9 /* Build configuration list for PBXProject "ios_system" */;
@@ -3275,6 +3359,7 @@
 			projectRoot = "";
 			targets = (
 				223496AA1FD5FC71007ED1A9 /* ios_system */,
+				B5A993263000901500A875B6 /* test */,
 				228264E72067F0A9002F9671 /* files */,
 				225E1B6A2067F39F005AC151 /* tar */,
 				22F6A10B2068390800E618F9 /* shell */,
@@ -3361,6 +3446,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		22F6A1AD20683F4100E618F9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5A993253000901500A875B6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4296,7 +4388,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B5A993233000901500A875B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5A9933B3000915600A875B6 /* test.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B5A993423000920C00A875B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 223496AA1FD5FC71007ED1A9 /* ios_system */;
+			targetProxy = B5A993413000920C00A875B6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		223496B11FD5FC71007ED1A9 /* Debug */ = {
@@ -5476,6 +5584,122 @@
 			};
 			name = Release;
 		};
+		B5A9932C3000901600A875B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y96PL6G497;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Nicolas Holzschuch. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = cl.ada.test;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4,7";
+				TVOS_DEPLOYMENT_TARGET = 13.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+				XROS_DEPLOYMENT_TARGET = 1.3;
+			};
+			name = Debug;
+		};
+		B5A9932D3000901600A875B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y96PL6G497;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Nicolas Holzschuch. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = cl.ada.test;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4,7";
+				TVOS_DEPLOYMENT_TARGET = 13.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+				XROS_DEPLOYMENT_TARGET = 1.3;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -5583,6 +5807,15 @@
 			buildConfigurations = (
 				22F6A1B520683F4100E618F9 /* Debug */,
 				22F6A1B620683F4100E618F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5A9932B3000901600A875B6 /* Build configuration list for PBXNativeTarget "test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5A9932C3000901600A875B6 /* Debug */,
+				B5A9932D3000901600A875B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

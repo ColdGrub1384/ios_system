@@ -541,5 +541,19 @@
 		<string>hqb:p:d:</string>
 		<string>no</string>
 	</array>
+	<key>[</key>
+	<array>
+		<string>test.framework/test</string>
+		<string>main</string>
+		<string></string>
+		<string>file</string>
+	</array>
+	<key>test</key>
+	<array>
+		<string>test.framework/test</string>
+		<string>main</string>
+		<string></string>
+		<string>file</string>
+	</array>
 </dict>
 </plist>
