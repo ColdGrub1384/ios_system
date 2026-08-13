@@ -247,7 +247,7 @@ void _exit(int n) {
 //
 
 int canSetSignal() {
-    if (currentSession == NULL) {
+    if (currentSession == NULL || currentSession->context == NULL) {
         return 1;
     }
     char* sessionId = (char*)currentSession->context;
