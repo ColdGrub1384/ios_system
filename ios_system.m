@@ -3761,53 +3761,24 @@ int ios_system(const char* inputCmd) {
                 if ([commandName isEqualToString: @"dash"]) {
                     params->storeRootThread = false;
                 }
-                bool commandOperatesOnFiles = ([commandStructure[3] isEqualToString:@"file"] ||
-                                               [commandStructure[3] isEqualToString:@"directory"] ||
-                                               params->isPipeOut || params->isPipeErr);
                 NSString* currentPath = [fileManager currentDirectoryPath];
-                commandOperatesOnFiles &= (currentPath != nil);
-                if (commandOperatesOnFiles) {
-                    // Send a signal to the system that we're going to change the current directory:
-                    NSURL* currentURL = [NSURL fileURLWithPath:currentPath];
-                    NSFileCoordinator *fileCoordinator =  [[NSFileCoordinator alloc] initWithFilePresenter:nil];
-                    [fileCoordinator coordinateWritingItemAtURL:currentURL options:0 error:NULL byAccessor:^(NSURL *currentURL) {
-                        currentSession->isMainThread = false;
-                        volatile pthread_t _tid = NULL;
-                        pthread_create(&_tid, NULL, run_function, params);
-                        while (_tid == NULL) { }
-                        // ios_storeThreadId(_tid);
-                        if (currentSession->mainThreadId == NULL) currentSession->mainThreadId = _tid;
-                        // Wait for this process to finish:
-						if (joinMainThread) {
-							pthread_join(_tid, NULL);
-							// If there are auxiliary process, also wait for them:
-							if (currentSession->lastThreadId > 0) pthread_join(currentSession->lastThreadId, NULL);
-							currentSession->lastThreadId = 0;
-							currentSession->current_command_root_thread = 0;
-						} else {
-							pthread_detach(_tid); // a thread must be either joined or detached
-						}
-                        currentSession->isMainThread = true;
-                    }];
+                currentSession->isMainThread = false;
+                volatile pthread_t _tid = NULL;
+                pthread_create(&_tid, NULL, run_function, params);
+                while (_tid == NULL) { }
+                // ios_storeThreadId(_tid);
+                if (currentSession->mainThreadId == NULL) currentSession->mainThreadId = _tid;
+                // Wait for this process to finish:
+                if (joinMainThread) {
+                    pthread_join(_tid, NULL);
+                    // If there are auxiliary process, also wait for them:
+                    if (currentSession->lastThreadId > 0) pthread_join(currentSession->lastThreadId, NULL);
+                    currentSession->lastThreadId = 0;
+                    currentSession->current_command_root_thread = 0;
                 } else {
-                    currentSession->isMainThread = false;
-                    volatile pthread_t _tid = NULL;
-                    pthread_create(&_tid, NULL, run_function, params);
-                    while (_tid == NULL) { }
-                    // ios_storeThreadId(_tid);
-                    if (currentSession->mainThreadId == NULL) currentSession->mainThreadId = _tid;
-                    // Wait for this process to finish:
-					if (joinMainThread) {
-						pthread_join(_tid, NULL);
-						// If there are auxiliary process, also wait for them:
-						if (currentSession->lastThreadId > 0) pthread_join(currentSession->lastThreadId, NULL);
-						currentSession->lastThreadId = 0;
-						currentSession->current_command_root_thread = 0;
-					} else {
-						pthread_detach(_tid); // a thread must be either joined or detached
-					}
-                    currentSession->isMainThread = true;
+                    pthread_detach(_tid); // a thread must be either joined or detached
                 }
+            currentSession->isMainThread = true;
             } else {
                 NSLog(@"Starting command %s, global_errno= %d\n", command, currentSession->global_errno);
                 // Don't send signal if not in main thread. Also, don't join threads.
