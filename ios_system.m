@@ -49,6 +49,8 @@ static NSString* ios_bookmarkDictionaryName = @"bookmarkNames";
 #include <sys/resource.h>
 static struct rlimit limitFilesOpen;
 
+bool multipleInterpreterSupport = false;
+
 #if (defined(TARGET_OS_IPHONE) || defined(TARGET_OS_SIMULATOR) || defined(TARGET_OS_MACCATALYST)) && !defined(TARGET_OS_WATCH)
 extern void display_alert(NSString* title, NSString* message);
 #else
@@ -3472,7 +3474,7 @@ int ios_system(const char* inputCmd) {
             NSString* functionName = commandStructure[1];
             // Python, Perl and TeX can have multiple commands calling themselves:
             // hasPrefix covers python, python3, python3.9.
-            if ([commandName hasPrefix: @"python"]) {
+            if ([commandName hasPrefix: @"python"] && multipleInterpreterSupport) {
                 // Ability to start multiple python3 scripts (required for Jupyter notebooks):
                 // start by increasing the number of the interpreter, until we're out.
                 int numInterpreter = 0;
@@ -3535,7 +3537,7 @@ int ios_system(const char* inputCmd) {
                         NSLog(@"Python new libraryName: %s", libraryName.UTF8String);
                     }
                 }
-            } else if ([commandName hasPrefix: @"perl"]) {
+            } else if ([commandName hasPrefix: @"perl"] && multipleInterpreterSupport) {
                 // Ability to start multiple perl scripts (required for cpan):
                 // start by increasing the number of the interpreter, until we're out.
                 int numInterpreter = 0;
@@ -3568,7 +3570,7 @@ int ios_system(const char* inputCmd) {
                         libraryName = [libraryName stringByReplacingOccurrencesOfString:@"perl" withString:commandName];
                     }
                 }
-            } else if ([TeXcommands containsObject: commandName]) {
+            } else if ([TeXcommands containsObject: commandName] && multipleInterpreterSupport) {
                 // It's a TeX command. Ability to start multiple TeX commands (required for Tikz)
                 // start by increasing the number of the interpreter, until we're out.
                 int numInterpreter = 0;
@@ -3616,7 +3618,7 @@ int ios_system(const char* inputCmd) {
                         }
                     }
                 }
-            } else if ([commandName hasPrefix: @"dash"]) {
+            } else if ([commandName hasPrefix: @"dash"] && multipleInterpreterSupport) {
                 // Ability to start multiple dash commands:
                 // start by increasing the number of the interpreter, until we're out.
                 int numInterpreter = 0;
@@ -3662,7 +3664,7 @@ int ios_system(const char* inputCmd) {
                         libraryName = [libraryName stringByReplacingOccurrencesOfString:@"dash" withString:commandName];
                     }
                 }
-            } else if ([commandName isEqualToString: @"ssh"] || [commandName isEqualToString: @"scp"] || [commandName isEqualToString: @"sftp"]) {
+            } else if (([commandName isEqualToString: @"ssh"] || [commandName isEqualToString: @"scp"] || [commandName isEqualToString: @"sftp"]) &&  && multipleInterpreterSupport) {
                 // Ability to start multiple ssh commands:
                 // start by increasing the number of the interpreter, until we're out.
                 int numInterpreter = 0;
