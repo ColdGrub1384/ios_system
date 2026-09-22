@@ -1317,7 +1317,6 @@ int too_many_scripts(int argc, char** argv) {
 
 int command_not_found(int argc, char** argv) {
     // Call an actual command in order to go through run_function / cleanup_function
-    fprintf(thread_stderr, "%s: command not found\n", argv[0]);
     NSLog(@"%s: command not found\n", argv[0]);
     currentSession->global_errno = 127;
     return 127;
@@ -3802,7 +3801,6 @@ int ios_system(const char* inputCmd) {
                 else pthread_detach(_tid_local); // a thread must be either joined or detached.
             }
         } else {
-            fprintf(params->stderr, "%s: command not found\n", argv[0]);
             NSLog(@"%s: command not found\n", argv[0]);
             free(argv);
             // If command output was redirected to a pipe, we still need to close it.
