@@ -116,6 +116,10 @@ static void initSessionParameters(sessionParameters* sp) {
     sp->lastThreadId = 0;
     sp->mainThreadId = 0;
     NSString* currentDirectory = [fileManager currentDirectoryPath];
+    if (!currentDirectory) {
+        // Can be NULL when not found
+        currentDirectory = @"/";
+    }
     strcpy(sp->currentDir, [currentDirectory UTF8String]);
     strcpy(sp->previousDirectory, [currentDirectory UTF8String]);
     sp->localMiniRoot[0] = 0;
