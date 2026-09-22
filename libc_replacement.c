@@ -14,6 +14,7 @@
 #include <sys/wait.h>
 #include <sys/param.h>
 #include <dlfcn.h>  // for dlopen()/dlsym()/dlclose()
+#include <time.h>
 
 #include "ios_error.h"
 #undef write
@@ -594,9 +595,15 @@ __attribute__ ((optnone)) void ios_waitpid(pid_t pid) {
     }
     // New system: thread Id is store with pid:
     threadToWaitFor = ios_getThreadId(pid);
+
+    struct timespec ts;
+    ts.tv_sec = 100 / 1000;
+    ts.tv_nsec = (100 % 1000) * 1000000;
+
     while (threadToWaitFor != 0) {
         // -1: not started, >0 started, not finished, 0: finished
         threadToWaitFor = ios_getThreadId(pid);
+        nanosleep(&ts, NULL); // Sleep to not overwhelm the CPU and make the programs slower
     }
     // fprintf(stderr, "Returning from ios_waitpid for %d \n", pid);
     return;
