@@ -3454,7 +3454,17 @@ int ios_system(const char* inputCmd) {
                 strcpy(argv[0], "dash");
             }
         }
-        //
+
+        // On macOS, a real executable can exist as a file
+        // prefer the ios_system version if it exists because we obviously can't dlopen the executable
+        if ([fileManager fileExistsAtPath:commandName] &&
+            ([commandName hasPrefix:@"/bin/"] || [commandName hasPrefix:@"/usr/bin/"])) {
+            NSString *name = [commandName componentsSeparatedByString:@"/"].lastObject;
+            if (ios_executable(name.UTF8String)) {
+                commandName = name;
+            }
+        }
+
         NSArray* commandStructure = [commandList objectForKey: commandName];
         void* handle = NULL;
         if (commandStructure != nil) {
