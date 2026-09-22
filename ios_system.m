@@ -3324,12 +3324,36 @@ int ios_system(const char* inputCmd) {
                                 if ([components.firstObject hasSuffix:@"env"]) {
                                     // /usr/bin/env <command>
                                     [components removeObjectAtIndex:0];
+
+                                    // /usr/bin/env -S <command>
+                                    if ([components.firstObject isEqual:@"-S"]) {
+                                        [components removeObjectAtIndex:0];
+                                    }
                                 }
+
+                                // Fix missing first quote whn stripping path
+                                NSString* firstQuote = @"";
+                                if (components.count > 0 && components[0].length > 0) {
+                                    if ([[components[0] substringToIndex:1] isEqual:@"\""]) {
+                                        firstQuote = @"\"";
+                                    } else if ([[components[0] substringToIndex:1] isEqual:@"'"]) {
+                                        firstQuote = @"'";
+                                    }
+                                }
+
                                 // Extract stript name by removing the path:
                                 NSString* scriptNameString = components[0];
                                 NSCharacterSet* separators = [NSCharacterSet characterSetWithCharactersInString:@"/"];
                                 NSArray<NSString*> *scriptComponents = [scriptNameString componentsSeparatedByCharactersInSet:separators];
                                 scriptNameString = scriptComponents.lastObject;
+                                if (firstQuote.length > 0 && ![scriptNameString hasPrefix:firstQuote]) {
+                                    scriptNameString = [firstQuote stringByAppendingString:scriptNameString];
+                                }
+
+                                // Unquote
+                                char* scriptNameC = (char *)[scriptNameString cStringUsingEncoding:NSUTF8StringEncoding];
+                                scriptNameString = [[NSString alloc] initWithCString:unquoteArgument(scriptNameC) encoding:NSUTF8StringEncoding];
+
                                 if ([scriptNameString isEqualToString:@"sh"])
                                     scriptNameString = @"dash";
                                 if ([scriptNameString isEqualToString:@"node"])
