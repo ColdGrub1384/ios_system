@@ -63,6 +63,13 @@ __thread FILE* thread_stdout;
 __thread FILE* thread_stderr;
 __thread void* thread_context;
 
+__attribute__((constructor))
+static void init_thread_stdio(void) {
+    thread_stdin = stdin;
+    thread_stdout = stdout;
+    thread_stderr = stderr;
+}
+
 FILE* ios_stdin(void) {
     return thread_stdin;
 }
