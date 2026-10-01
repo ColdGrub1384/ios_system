@@ -3333,6 +3333,10 @@ int ios_system(const char* inputCmd) {
                                     if ([components.firstObject isEqual:@"-S"]) {
                                         [components removeObjectAtIndex:0];
                                     }
+
+                                    if (components.count == 0) {
+                                        [components addObject:@"sh"];
+                                    }
                                 }
 
                                 // Fix missing first quote whn stripping path
