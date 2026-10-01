@@ -3670,7 +3670,7 @@ int ios_system(const char* inputCmd) {
                         libraryName = [libraryName stringByReplacingOccurrencesOfString:@"dash" withString:commandName];
                     }
                 }
-            } else if (([commandName isEqualToString: @"ssh"] || [commandName isEqualToString: @"scp"] || [commandName isEqualToString: @"sftp"]) &&  && multipleInterpreterSupport) {
+            } else if (([commandName isEqualToString: @"ssh"] || [commandName isEqualToString: @"scp"] || [commandName isEqualToString: @"sftp"]) && multipleInterpreterSupport) {
                 // Ability to start multiple ssh commands:
                 // start by increasing the number of the interpreter, until we're out.
                 int numInterpreter = 0;
