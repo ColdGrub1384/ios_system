@@ -94,6 +94,7 @@ typedef struct _sessionParameters {
     char currentDir[MAXPATHLEN];
     char previousDirectory[MAXPATHLEN];
     char localMiniRoot[MAXPATHLEN];
+    char searchPath[MAXPATHLEN];
     pthread_t current_command_root_thread; // thread ID of first command
     pthread_t lastThreadId; // thread ID of last command.
     pthread_t mainThreadId; // thread ID of parent command, if any (e.g. vim, which starts "sh -c cd dir && flake8 file")
@@ -141,6 +142,8 @@ static void initSessionParameters(sessionParameters* sp) {
     strcpy(sp->columns, "80");
     strcpy(sp->lines, "80");
     sp->activePager = FALSE;
+
+    strcpy(sp->searchPath, getenv("PATH"));
 }
 
 void ios_setBookmarkDictionaryName(NSString* name) {
@@ -672,7 +675,6 @@ static NSDictionary *commandList = nil;
 NSArray *backgroundCommandList = nil;
 // do recompute directoriesInPath only if $PATH has changed
 static NSString* fullCommandPath = @"";
-static NSArray *directoriesInPath;
 
 void initializeEnvironment(void) {
     // setup a few useful environment variables
@@ -745,7 +747,6 @@ void initializeEnvironment(void) {
         binPath = [mainBundlePath stringByAppendingPathComponent:@"bin"];
         fullCommandPath = [[binPath stringByAppendingString:@":"] stringByAppendingString:fullCommandPath];
     }
-    directoriesInPath = [fullCommandPath componentsSeparatedByString:@":"];
     setenv("PATH", fullCommandPath.UTF8String, 1); // 1 = override existing value
     // Store the maximum number of file descriptors allowed:
     getrlimit(RLIMIT_NOFILE, &limitFilesOpen);
@@ -2187,6 +2188,10 @@ int ios_killpid(pid_t pid, int sig) {
     return 0;
 }
 
+void ios_setPath(const char *path) {
+    strcpy(currentSession->searchPath, path);
+}
+
 void ios_switchSession(const void* sessionId) {
     char* sessionName = (char*) sessionId;
     // NSLog(@"Switching to session: %s\n", sessionName);
@@ -2645,7 +2650,7 @@ NSString* beforeScriptCommandName(NSString* scriptName) {
     // checks whether it has wasm signature, if so insert "wasm" before script name.
     BOOL isDir = false;
     NSFileManager *fileManager = [[NSFileManager alloc] init];
-    directoriesInPath = [fullCommandPath componentsSeparatedByString:@":"];
+    NSArray *directoriesInPath = [[[NSString alloc] initWithCString:currentSession->searchPath] componentsSeparatedByString:@":"];
     for (NSString* path in directoriesInPath) {
         // If we don't have access to the path component, there's no point in continuing:
         if (![fileManager fileExistsAtPath:path isDirectory:&isDir]) continue;
@@ -3213,11 +3218,8 @@ int ios_system(const char* inputCmd) {
             cmdIsAPath = ([commandName rangeOfString:@"/"].location != NSNotFound);
             if (!cmdIsAPath || cmdIsAFile) {
                 // We go through the path, because that command may be a file in the path
-                NSString* checkingPath = [NSString stringWithCString:getenv("PATH") encoding:NSUTF8StringEncoding];
-                if (! [fullCommandPath isEqualToString:checkingPath]) {
-                    fullCommandPath = checkingPath;
-                    directoriesInPath = [fullCommandPath componentsSeparatedByString:@":"];
-                }
+                NSString *checkingPath = [NSString stringWithCString:currentSession->searchPath encoding:NSUTF8StringEncoding];
+                NSArray *directoriesInPath = [checkingPath componentsSeparatedByString:@":"];
                 for (NSString* path in directoriesInPath) {
                     // If we don't have access to the path component, there's no point in continuing:
                     if (![fileManager fileExistsAtPath:path isDirectory:&isDir]) continue;
