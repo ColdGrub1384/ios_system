@@ -3362,7 +3362,7 @@ int ios_system(const char* inputCmd) {
                                 char* scriptNameC = (char *)[scriptNameString cStringUsingEncoding:NSUTF8StringEncoding];
                                 scriptNameString = [[NSString alloc] initWithCString:unquoteArgument(scriptNameC) encoding:NSUTF8StringEncoding];
 
-                                if ([scriptNameString isEqualToString:@"sh"])
+                                if ([scriptNameString isEqualToString:@"sh"] && [commandList.allKeys containsObject:@"dash"])
                                     scriptNameString = @"dash";
                                 if ([scriptNameString isEqualToString:@"node"])
                                     scriptNameString = @"jsc";
@@ -3440,7 +3440,7 @@ int ios_system(const char* inputCmd) {
         int (*function)(int ac, char** av) = NULL;
         if (commandList == nil) initializeCommandList();
         NSString* commandName = [NSString stringWithCString:argv[0] encoding:NSUTF8StringEncoding];
-        if ([commandName isEqualToString:@"sh"]) {
+        if ([commandName isEqualToString:@"sh"] && [commandList.allKeys containsObject:@"dash"]) {
             // if it's sh -c commands (or sh -c command1 || command2), we continue using our own sh_main
             // (for continuity: keep our known bugs, rather than break things).
             // otherwise we use dash_main:
